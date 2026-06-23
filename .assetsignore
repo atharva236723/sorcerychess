@@ -1,0 +1,10 @@
+node_modules
+.wrangler
+.claude
+.git
+wrangler.jsonc
+package.json
+package-lock.json
+.assetsignore
+CLAUDE.md
+README.md

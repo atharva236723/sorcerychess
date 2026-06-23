@@ -1,0 +1,171 @@
+/* === Sorcery Chess · points.css ===
+   The "Points & Ranks" explainer page (#page-points). Glassmorphism to match the rest of
+   the site — the only accent colours are the themeable --accent, the magic blue --magic for
+   gains, and a soft red for the loss/peril lines. Rides between leaderboard/variant and themes
+   in the cascade. */
+
+#page-points .ptswrap{ max-width:1040px; margin:0 auto; padding:0 20px 80px; }
+
+/* hero */
+.pts-hero{ text-align:center; padding:18px 0 30px; }
+.pts-kicker{ display:inline-block; font-size:12px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--accent); font-weight:800; opacity:.9; }
+.pts-hero h2{ font-size:clamp(30px,5vw,46px); font-weight:800; margin:8px 0 12px; letter-spacing:.5px; }
+.pts-sub{ max-width:640px; margin:0 auto; color:var(--muted); font-size:14.5px; line-height:1.75; }
+
+/* live "your standing" banner */
+.pts-you{ background:var(--glass-strong); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-bd); border-radius:18px; box-shadow:var(--glass-sh);
+  padding:22px 24px; margin:6px 0 34px; }
+.py-rank{ display:flex; flex-direction:column; gap:2px; padding-bottom:14px; border-bottom:1px solid var(--glass-bd); }
+.py-k{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:700; }
+.py-rank>b{ font-size:26px; font-weight:800; letter-spacing:.5px; }
+.py-pts{ font-size:13px; color:var(--accent); font-weight:600; }
+.py-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0; }
+.py-cell{ background:var(--glass); border:1px solid var(--glass-bd); border-radius:12px; padding:13px 14px;
+  display:flex; flex-direction:column; gap:6px; }
+.py-lab{ font-size:11px; color:var(--muted); letter-spacing:.4px; line-height:1.4; }
+.py-cell>b{ font-size:24px; font-weight:800; }
+.py-cell>b small{ font-size:13px; color:var(--muted); font-weight:600; }
+.py-cell>b.up{ color:var(--magic); }
+.py-cell>b.down{ color:#ff6b6b; }
+.py-cell>b.safe{ color:#34d8a0; font-size:18px; }
+.py-next{ font-size:13px; color:var(--muted); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.py-next>b{ color:var(--ink); font-weight:800; }
+.py-bar{ flex:0 0 160px; height:7px; border-radius:4px; background:rgba(255,255,255,.10); overflow:hidden; }
+.py-bar>span{ display:block; height:100%; border-radius:4px;
+  background:linear-gradient(90deg, var(--accent), var(--magic)); box-shadow:0 0 10px rgba(var(--accent-rgb),.6); }
+
+/* section wrappers */
+.pts-sec{ margin:0 0 40px; }
+.pts-sec>h3{ font-size:17px; letter-spacing:1.5px; text-transform:uppercase; font-weight:800; margin-bottom:8px; }
+.pts-p{ color:var(--muted); font-size:14px; line-height:1.75; max-width:760px; margin-bottom:20px; }
+.pts-foot-note{ color:var(--muted); font-size:12.5px; margin-top:14px; text-align:center; opacity:.85; }
+
+/* the three variant stakes cards */
+.pts-variants{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.ptsv{ background:var(--glass); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-bd); border-radius:16px; box-shadow:var(--glass-sh); overflow:hidden;
+  display:flex; flex-direction:column; transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.ptsv:hover{ transform:translateY(-4px); border-color:var(--glass-bd-hi); box-shadow:0 16px 34px rgba(0,0,0,.6); }
+.ptsv.soon{ opacity:.78; }
+.ptsv-head{ display:flex; align-items:center; gap:12px; padding:16px 16px 14px; border-bottom:1px solid var(--glass-bd); }
+.ptsv-glyph{ width:42px; height:42px; flex:none; border-radius:50%; background:#fff; color:#000; border:2px solid #000;
+  display:flex; align-items:center; justify-content:center; font-size:21px; }
+.ptsv-id{ flex:1; min-width:0; display:flex; flex-direction:column; }
+.ptsv-id b{ font-size:14.5px; font-weight:800; letter-spacing:.4px; }
+.ptsv-id small{ font-size:11px; color:var(--muted); }
+.ptsv-mult{ flex:none; font-size:16px; font-weight:900; color:var(--accent);
+  background:rgba(var(--accent-rgb),.14); border:1px solid rgba(var(--accent-rgb),.35);
+  border-radius:9px; padding:4px 9px; letter-spacing:.5px; }
+.ptsv-soon{ font-size:11.5px; color:var(--muted); padding:10px 16px 0; }
+.ptsv-tbl{ width:100%; border-collapse:collapse; margin:6px 0 2px; }
+.ptsv-tbl th{ text-align:left; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted);
+  font-weight:700; padding:8px 16px; }
+.ptsv-tbl th:last-child{ text-align:right; }
+.ptsv-tbl td{ padding:8px 16px; font-size:13px; border-top:1px solid rgba(255,255,255,.05); }
+.ptsv-tbl .d-foe{ display:flex; align-items:center; gap:8px; font-weight:600; }
+.ptsv-tbl .d-g{ font-size:14px; width:18px; text-align:center; }
+.ptsv-tbl .d-pts{ text-align:right; font-weight:800; color:var(--magic); white-space:nowrap; }
+.ptsv-tbl tr.dread .d-foe{ text-transform:uppercase; letter-spacing:.5px; font-size:11.5px; font-weight:800; }
+.ptsv-tbl tr.dread .d-pts{ color:#fff; }
+.ptsv-foot{ margin-top:auto; padding:10px 16px 16px; display:flex; flex-direction:column; gap:7px;
+  border-top:1px solid var(--glass-bd); }
+.pf-row{ display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted); }
+.pf-row b{ font-weight:800; font-size:14px; }
+.pf-row b.up{ color:var(--magic); }
+.pf-row b.down{ color:#ff6b6b; }
+
+/* the four rule cards */
+.pts-grid2{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.pts-card{ background:var(--glass); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-bd); border-radius:14px; box-shadow:var(--glass-sh); padding:20px 20px; }
+.pts-card.peril{ border-color:rgba(255,107,107,.4); box-shadow:0 0 22px rgba(255,80,80,.12), var(--glass-sh); }
+.pc-ico{ display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px;
+  border-radius:11px; background:rgba(var(--accent-rgb),.14); border:1px solid rgba(var(--accent-rgb),.3);
+  font-size:19px; margin-bottom:12px; }
+.pts-card.peril .pc-ico{ background:rgba(255,80,80,.14); border-color:rgba(255,80,80,.35); }
+.pts-card h4{ font-size:15px; font-weight:800; letter-spacing:.4px; margin-bottom:7px; }
+.pts-card p{ font-size:13px; color:var(--muted); line-height:1.7; }
+
+/* the 17-rung ladder */
+.pts-ladder{ display:flex; flex-direction:column; gap:5px; }
+.rung{ display:flex; align-items:center; gap:14px; padding:10px 16px; border-radius:11px;
+  background:var(--glass); border:1px solid var(--glass-bd); transition:transform .15s ease; }
+.rung:hover{ transform:translateX(4px); }
+.rung-n{ flex:none; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:800; color:var(--muted); background:rgba(255,255,255,.05); border:1px solid var(--glass-bd); }
+.rung-name{ flex:1; font-size:14.5px; font-weight:700; letter-spacing:.4px; }
+.rung-at{ flex:none; font-size:12px; color:var(--muted); font-weight:600; }
+.rung.done{ opacity:.6; }
+.rung.done .rung-n{ color:#34d8a0; border-color:rgba(52,216,160,.4); }
+.rung.now{ background:rgba(var(--accent-rgb),.16); border-color:var(--glass-bd-hi);
+  box-shadow:0 0 18px rgba(var(--accent-rgb),.35), inset 0 0 14px rgba(var(--accent-rgb),.10); }
+.rung.now .rung-n{ background:var(--accent); color:#fff; border-color:transparent; box-shadow:0 0 12px rgba(var(--accent-rgb),.7); }
+.rung.now .rung-name{ color:var(--ink); }
+
+/* footer CTA */
+.pts-cta{ text-align:center; margin-top:46px; display:flex; flex-direction:column; align-items:center; gap:16px; }
+
+/* "Earn your first points" — white primary CTA (matches the home hero / codex button).
+   The base button{} rules don't reach an <a>, so it's spelled out; ctaGlow/ctaShine
+   keyframes come from components.css. */
+.pts-cta .cta{
+  display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+  font-family:'Inter',Arial,sans-serif; font-weight:800; font-size:16px; letter-spacing:1.4px;
+  color:#000; background:linear-gradient(180deg,#ffffff,#d9d9d9);
+  border:none; border-radius:14px; padding:16px 40px; cursor:pointer;
+  position:relative; overflow:hidden;
+  box-shadow:0 2px 0 #000, 0 6px 18px rgba(0,0,0,.45);
+  transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  animation:ctaGlow 2.8s ease-in-out infinite;
+}
+.pts-cta .cta:hover{
+  transform:translateY(-2px);
+  background:linear-gradient(180deg,#ffffff,#ececec);
+  box-shadow:0 4px 0 #000, 0 10px 26px rgba(0,0,0,.55);
+}
+.pts-cta .cta:active{transform:translateY(0); box-shadow:0 1px 0 #000, 0 2px 6px rgba(0,0,0,.4);}
+.pts-cta .cta::after{
+  content:""; position:absolute; top:0; left:-150%; width:55%; height:100%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.6), transparent);
+  transform:skewX(-18deg); pointer-events:none;
+}
+.pts-cta .cta:hover::after{animation:ctaShine .85s ease;}
+
+/* "See the worldwide ladder" — a golden glass button echoing the leaderboard CTA
+   (.cta-alt on the home hero), since that's exactly where it leads. */
+.pts-cta .herolink{
+  display:inline-flex; align-items:center; gap:9px; text-decoration:none;
+  margin:0; opacity:1; font-weight:700; font-size:14.5px; letter-spacing:1.1px;
+  color:#ffe7ab;
+  background:linear-gradient(180deg, rgba(74,58,24,.66), rgba(38,29,10,.66));
+  -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+  border:1px solid rgba(245,202,114,.55); border-radius:13px; padding:13px 30px;
+  box-shadow:0 2px 0 rgba(0,0,0,.55), 0 5px 16px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,228,160,.22);
+  position:relative; overflow:hidden;
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, color .16s ease;
+}
+.pts-cta .herolink:hover{
+  transform:translateY(-2px); color:#fff4d6; opacity:1; text-shadow:none;
+  border-color:rgba(255,217,132,.92);
+  box-shadow:0 4px 0 rgba(0,0,0,.55), 0 10px 26px rgba(240,191,92,.34), inset 0 1px 0 rgba(255,236,182,.4);
+}
+.pts-cta .herolink:active{transform:translateY(0); box-shadow:0 1px 0 rgba(0,0,0,.5), 0 3px 9px rgba(0,0,0,.4);}
+.pts-cta .herolink::after{
+  content:""; position:absolute; top:0; left:-150%; width:55%; height:100%;
+  background:linear-gradient(100deg, transparent, rgba(255,237,186,.55), transparent);
+  transform:skewX(-18deg); pointer-events:none;
+}
+.pts-cta .herolink:hover::after{animation:ctaShine .85s ease;}
+
+@media (prefers-reduced-motion:reduce){
+  .pts-cta .cta{animation:none;}
+  .pts-cta .cta:hover::after, .pts-cta .herolink:hover::after{animation:none;}
+}
+
+@media (max-width:820px){
+  .pts-variants{ grid-template-columns:1fr; }
+  .py-grid{ grid-template-columns:1fr; }
+  .pts-grid2{ grid-template-columns:1fr; }
+}

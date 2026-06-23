@@ -1,0 +1,140 @@
+/* === Sorcery Chess · themes.css ===
+   The six colour skins (light/crimson/sapphire/emerald/amethyst over the dark default) and the navbar theme-picker dropdown.
+   Auto-split from the original single-file index.html. Linked in a fixed cascade
+   order (base → home → board → components → themes → responsive); do not reorder. */
+
+  /* —— LIGHT · frosted daylight —— */
+  html.theme-light{
+    background:
+      radial-gradient(1200px 820px at 16% -12%, rgba(120,150,235,.22), transparent 60%),
+      radial-gradient(1050px 780px at 90% 6%,  rgba(150,185,240,.18), transparent 58%),
+      radial-gradient(1200px 980px at 50% 122%, rgba(120,160,235,.15), transparent 62%),
+      #eaedf4;
+  }
+  html.theme-light #bgfx{opacity:.28;}
+  html.theme-light #bgfx::after{background:radial-gradient(120% 100% at 50% 42%, transparent 58%, rgba(150,160,200,.32) 100%);}
+  body.theme-light{
+    --panel:#ffffff; --line:#d0d3dd; --ink:#1b1c22; --muted:#5a5d6b;
+    --accent:#4a6bd0; --accent-rgb:74,107,208;
+    --glass:linear-gradient(165deg, rgba(255,255,255,.74), rgba(236,240,247,.64));
+    --glass-strong:linear-gradient(155deg, rgba(255,255,255,.90), rgba(232,237,245,.80));
+    --glass-bd:rgba(20,30,60,.12);
+    --glass-sh:0 18px 46px rgba(20,30,60,.13), inset 0 1px 0 rgba(255,255,255,.7);
+    --soft:rgba(20,30,60,.045); --soft-hi:rgba(20,30,60,.09);
+  }
+  body.theme-light input, body.theme-light textarea{background:#f3f5fa; color:var(--ink);}
+  body.theme-light input:focus, body.theme-light textarea:focus{border-color:#7a8bbf; box-shadow:0 0 0 3px rgba(80,110,200,.16);}
+  body.theme-light #topnav a.nl.active{color:#fff; background:#1b1c22;}
+  body.theme-light .authtabs button.on{background:#1b1c22; color:#fff;}
+  body.theme-light .gtimer{background:#f1f3f8;}
+  body.theme-light #modeBanner{background:rgba(20,30,60,.05);}
+  body.theme-light .rcbar{background:#e2e5ee;}
+  body.theme-light .memberline b{color:#1b2740;}
+
+  /* —— CRIMSON · ember & blood —— */
+  html.theme-crimson{
+    background:
+      radial-gradient(1200px 820px at 16% -12%, rgba(228,46,52,.32), transparent 60%),
+      radial-gradient(1050px 780px at 90% 6%,  rgba(150,18,40,.30), transparent 58%),
+      radial-gradient(1200px 980px at 50% 122%, rgba(255,98,70,.20), transparent 62%),
+      #130406;
+  }
+  html.theme-crimson #bgfx{filter:hue-rotate(120deg) saturate(1.15);}
+  body.theme-crimson{
+    --panel:#25101a; --line:#4a2228; --ink:#fbeef0; --muted:#caa0a6;
+    --accent:#ff5a6a; --accent-rgb:255,90,106;
+    --glass:linear-gradient(165deg, rgba(74,26,34,.55), rgba(28,8,12,.64));
+    --glass-strong:linear-gradient(155deg, rgba(86,30,40,.82), rgba(24,7,11,.90));
+    --glass-bd:rgba(255,120,130,.20);
+    --soft:rgba(255,110,120,.07); --soft-hi:rgba(255,110,120,.14);
+  }
+
+  /* —— SAPPHIRE · deep azure —— */
+  html.theme-sapphire{
+    background:
+      radial-gradient(1200px 820px at 16% -12%, rgba(40,130,255,.32), transparent 60%),
+      radial-gradient(1050px 780px at 90% 6%,  rgba(18,76,200,.28), transparent 58%),
+      radial-gradient(1200px 980px at 50% 122%, rgba(70,210,255,.20), transparent 62%),
+      #03070f;
+  }
+  body.theme-sapphire{
+    --panel:#0e1d2e; --line:#1d3550; --ink:#eaf4ff; --muted:#94b3d0;
+    --accent:#38bdf8; --accent-rgb:56,189,248;
+    --glass:linear-gradient(165deg, rgba(22,52,86,.55), rgba(7,15,27,.64));
+    --glass-strong:linear-gradient(155deg, rgba(26,62,98,.82), rgba(6,13,24,.90));
+    --glass-bd:rgba(90,180,255,.20);
+    --soft:rgba(90,180,255,.07); --soft-hi:rgba(90,180,255,.14);
+  }
+
+  /* —— EMERALD · jade & forest —— */
+  html.theme-emerald{
+    background:
+      radial-gradient(1200px 820px at 16% -12%, rgba(22,200,140,.30), transparent 60%),
+      radial-gradient(1050px 780px at 90% 6%,  rgba(10,140,108,.26), transparent 58%),
+      radial-gradient(1200px 980px at 50% 122%, rgba(90,235,170,.18), transparent 62%),
+      #04120d;
+  }
+  html.theme-emerald #bgfx{filter:hue-rotate(225deg) saturate(1.1);}
+  body.theme-emerald{
+    --panel:#0c2018; --line:#1c3a2d; --ink:#e8fff5; --muted:#93c4ae;
+    --accent:#34d8a0; --accent-rgb:52,216,160;
+    --glass:linear-gradient(165deg, rgba(20,56,42,.55), rgba(6,18,13,.64));
+    --glass-strong:linear-gradient(155deg, rgba(24,64,48,.82), rgba(5,16,11,.90));
+    --glass-bd:rgba(80,220,160,.20);
+    --soft:rgba(80,220,160,.07); --soft-hi:rgba(80,220,160,.14);
+  }
+
+  /* —— AMETHYST · royal violet —— */
+  html.theme-amethyst{
+    background:
+      radial-gradient(1200px 820px at 16% -12%, rgba(170,92,255,.32), transparent 60%),
+      radial-gradient(1050px 780px at 90% 6%,  rgba(122,42,222,.28), transparent 58%),
+      radial-gradient(1200px 980px at 50% 122%, rgba(220,124,255,.20), transparent 62%),
+      #0d0518;
+  }
+  body.theme-amethyst{
+    --panel:#1c1030; --line:#37224f; --ink:#f5ecff; --muted:#b7a0cf;
+    --accent:#c084fc; --accent-rgb:192,132,252;
+    --glass:linear-gradient(165deg, rgba(56,32,82,.55), rgba(18,8,28,.64));
+    --glass-strong:linear-gradient(155deg, rgba(64,36,94,.82), rgba(16,7,26,.90));
+    --glass-bd:rgba(190,140,255,.22);
+    --soft:rgba(190,140,255,.08); --soft-hi:rgba(190,140,255,.15);
+  }
+
+  /* —— theme picker: a glass dropdown of swatches in the navbar —— */
+  .themepick{position:relative; display:inline-flex;}
+  #themeBtn::after{content:" ▾"; font-size:9px; opacity:.7;}
+  .thmenu{
+    position:absolute; top:calc(100% + 8px); right:0; z-index:40;
+    display:none; flex-direction:column; gap:3px; width:192px; padding:7px;
+    background:var(--over); -webkit-backdrop-filter:blur(22px); backdrop-filter:blur(22px);
+    border:1px solid var(--over-bd); border-radius:13px;
+    box-shadow:0 22px 56px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08);
+    transform-origin:top right; animation:thpop .22s cubic-bezier(.34,1.42,.5,1);
+  }
+  .thmenu.open{display:flex;}
+  @keyframes thpop{from{opacity:0; transform:translateY(-8px) scale(.94);} to{opacity:1; transform:none;}}
+  .thopt{
+    display:flex; align-items:center; gap:10px; padding:8px 9px; border-radius:9px; cursor:pointer;
+    color:var(--over-ink); font-size:12.5px; font-weight:600; letter-spacing:.4px;
+    border:1px solid transparent; transition:background .14s ease, border-color .14s ease;
+  }
+  .thopt:hover{background:rgba(255,255,255,.07);}
+  .thopt.on{background:rgba(255,255,255,.06); border-color:var(--over-bd);}
+  .thopt .sw{
+    flex:0 0 22px; width:22px; height:22px; border-radius:50%;
+    border:1.5px solid rgba(255,255,255,.55); box-shadow:0 2px 8px rgba(0,0,0,.5);
+  }
+  .thopt .lbl{flex:1;}
+  .thopt .tick{font-size:12px; color:var(--over-ink); opacity:0;}
+  .thopt.on .tick{opacity:1;}
+  @media (prefers-reduced-motion:reduce){ .thmenu{animation:none;} }
+
+  /* =====================================================================
+     RESPONSIVE — phones → tablets → laptops. Goal: every view fits its
+     viewport with no horizontal scroll and nothing overlapping. Layered
+     breakpoints (1000 → 760 → 560 → 380), each only tightening the last.
+     ===================================================================== */
+  /* a stray pixel of overflow anywhere must never make the whole page
+     scroll sideways — clip it at the body */
+  body{overflow-x:hidden;}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PYW0RG12M0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PYW0RG12M0');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Profile — Sorcery Chess</title>
+<meta name="description" content="Your Sorcery Chess profile — choose a sigil, aura, epithet, favoured spellcaster and allegiance, and tell your legend.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://sorcerychess.com/profile.html">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="color-scheme" content="dark light">
+
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="manifest" href="site.webmanifest" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css?v=8">
+<link rel="stylesheet" href="css/home.css?v=6">
+<link rel="stylesheet" href="css/components.css?v=7">
+<link rel="stylesheet" href="css/leaderboard.css?v=7">
+<link rel="stylesheet" href="css/responsive.css?v=4">
+<link rel="stylesheet" href="css/themes.css?v=4">
+<link rel="stylesheet" href="css/pages.css?v=3">
+<link rel="stylesheet" href="css/transitions.css?v=1">
+<script>(function(){try{var ids=['light','crimson','sapphire','emerald','amethyst'];
+var t=localStorage.getItem('sorceryChessTheme');
+if(ids.indexOf(t)>=0){document.documentElement.classList.add('theme-'+t);
+document.addEventListener('DOMContentLoaded',function(){document.body.classList.add('theme-'+t);});}
+}catch(e){}})();</script>
+</head>
+<body class="standalone">
+<div id="bgfx" aria-hidden="true"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+<nav class="site-nav">
+  <a class="brand" href="index.html">♚ Sorcery Chess</a>
+  <a class="nav-l" href="index.html">Home</a>
+  <a class="nav-l" href="codex.html">Spellcasters</a>
+  <a class="nav-l" href="leaderboard.html">Leaderboard</a>
+  <a class="nav-l" href="points.html">Scoring</a>
+  <a class="nav-l" href="about.html">About</a>
+  <a class="nav-l" href="contact.html">Contact</a>
+  <a class="nav-l" href="privacy.html">Privacy</a>
+  <a class="nav-l" href="terms.html">Terms</a>
+  <span class="spacer"></span>
+  <a class="nav-cta" href="index.html">▶ Play now</a>
+</nav>
+
+<main class="page-main">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> › <span>Profile</span></nav>
+
+  <!-- shown to signed-out visitors (no session in this browser) -->
+  <article class="pagebox" id="profGate" style="display:none; text-align:center;">
+    <span class="pi">♛</span>
+    <h1>Your profile awaits</h1>
+    <p class="lead">Profiles live entirely in your browser. Sign in to the arena to choose your sigil, aura,
+      epithet and allegiance — and to tell your legend.</p>
+    <p style="margin-top:18px;"><a class="cta" href="index.html">⚔ Enter the arena</a></p>
+  </article>
+
+  <!-- the real profile editor (shown when signed in) -->
+  <section id="page-profile" class="page doc active" style="display:none;">
+  <div class="profwrap" id="profWrap">
+    <div class="profhead">
+      <div class="pavatar" id="profAvatar"><span class="pring"></span><span class="pglyph" id="profAvGlyph">♛</span></div>
+      <div class="pinfo">
+        <div class="pname" id="profName">Sorcerer</div>
+        <div class="ptitle" id="profTitle">the Unranked</div>
+        <div class="pmeta" id="profMeta"></div>
+        <div class="pbio" id="profBio"></div>
+      </div>
+    </div>
+
+    <div class="profrow">
+      <div class="profsection">
+        <h3>⚜ Choose your sigil</h3>
+        <p class="pdesc">Pick an arcane avatar — or conjure your own portrait from an image.</p>
+        <div class="optgrid" id="avatarGrid"></div>
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="ghost mini" id="profUploadBtn">🖼 Upload portrait</button>
+          <button class="ghost mini" id="profClearPic" style="display:none;">✕ Remove portrait</button>
+          <input type="file" id="profPicInput" accept="image/*" style="display:none;">
+        </div>
+      </div>
+      <div class="profsection">
+        <h3>✦ Arcane aura</h3>
+        <p class="pdesc">The colour of your magic — it tints your medallion and card.</p>
+        <div class="optgrid" id="auraGrid"></div>
+      </div>
+    </div>
+
+    <div class="profsection">
+      <h3>☄ Epithet</h3>
+      <p class="pdesc">A fantasy title carried beneath your name across the realm.</p>
+      <div class="optgrid" id="titleGrid"></div>
+    </div>
+
+    <div class="profrow">
+      <div class="profsection">
+        <h3>⚔ Favoured spellcaster</h3>
+        <p class="pdesc">Declare which of the four arcane pieces you wield best.</p>
+        <div class="optgrid" id="favGrid"></div>
+      </div>
+      <div class="profsection">
+        <h3>⚑ Allegiance</h3>
+        <p class="pdesc">Swear to a realm — your banner is shown beneath your name. Click again to renounce.</p>
+        <div class="optgrid" id="realmGrid"></div>
+      </div>
+    </div>
+
+    <div class="profsection">
+      <h3>❖ Card frame</h3>
+      <p class="pdesc">A decorative border for your profile card.</p>
+      <div class="optgrid" id="frameGrid"></div>
+    </div>
+
+    <div class="profsection">
+      <h3>✎ Your legend</h3>
+      <p class="pdesc">A battle cry or short bio, shown on your profile.</p>
+      <div class="afield"><label for="profNameInput">Display name</label>
+        <input id="profNameInput" maxlength="24"></div>
+      <div class="afield" style="margin-top:12px;"><label for="profBioInput">Battle cry / bio</label>
+        <textarea id="profBioInput" rows="3" maxlength="160" placeholder="Speak your legend…"></textarea></div>
+      <button id="profSaveBtn" style="margin-top:14px;">✶ Save changes</button>
+    </div>
+  </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="frow">
+    <div class="fbrand">♚ Sorcery Chess
+      <span class="ftag">The royal game, twelve squares wide — strictly black &amp; white, strictly magical.</span>
+    </div>
+    <div class="fcol"><h4>Game</h4>
+      <a href="index.html">Home</a>
+      <a href="index.html">Play now</a>
+      <a href="codex.html">Spellcasters</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="points.html">Scoring</a>
+    </div>
+    <div class="fcol"><h4>Company</h4>
+      <a href="about.html">About us</a>
+      <a href="contact.html">Contact us</a>
+    </div>
+    <div class="fcol"><h4>Legal</h4>
+      <a href="privacy.html">Privacy policy</a>
+      <a href="terms.html">Terms &amp; conditions</a>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 Sorcery Chess — a local-only demo. Your data never leaves this device.</span>
+    <span>Made with ♟ and a little magic.</span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="js/smooth.js?v=1"></script>
+<script src="js/standalone.js?v=1"></script>
+<script src="js/state.js?v=5"></script>
+<script src="js/account.js?v=7"></script>
+<script src="js/profile.js?v=5"></script>
+<script>
+(function(){
+  // profiles are personal and local — show the editor only when this browser holds a session
+  var signedIn=false;
+  try{ var c=curUser(); signedIn=!!c; }catch(e){}
+  var ed=document.getElementById('page-profile'), gate=document.getElementById('profGate');
+  if(signedIn){ ed.style.display=''; try{ renderProfile(); }catch(e){ console.error('profile init failed', e); } }
+  else { gate.style.display=''; }
+})();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"6608142fc41b4fb8a13ff3dafaa86a23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

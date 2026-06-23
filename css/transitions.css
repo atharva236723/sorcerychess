@@ -1,0 +1,30 @@
+/* === Sorcery Chess · transitions.css ===
+   Native View Transitions for page navigation. Animates real cross-document
+   navigations between every HTML file on the site, and the remaining in-app
+   home/modes/play swaps (driven by document.startViewTransition in hierarchy.js).
+   Zero-dependency progressive enhancement: browsers without the API simply
+   navigate instantly. This file is linked on EVERY page so both the outgoing and
+   incoming document opt in (cross-document transitions need both sides to agree). */
+
+@view-transition { navigation: auto; }
+
+/* smooth crossfade + a slight vertical slide, matching the glassmorphism feel */
+@media (prefers-reduced-motion: no-preference){
+  ::view-transition-old(root){ animation: scvtOut .28s cubic-bezier(.4,0,.2,1) both; }
+  ::view-transition-new(root){ animation: scvtIn  .34s cubic-bezier(.22,.7,.35,1) both; }
+}
+@keyframes scvtOut{
+  from{ opacity:1; transform:none; }
+  to  { opacity:0; transform:translateY(-10px) scale(.992); }
+}
+@keyframes scvtIn{
+  from{ opacity:0; transform:translateY(14px) scale(.992); }
+  to  { opacity:1; transform:none; }
+}
+
+/* respect reduced-motion: instant swap, no slide/fade */
+@media (prefers-reduced-motion: reduce){
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){ animation:none !important; }
+}

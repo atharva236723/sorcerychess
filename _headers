@@ -1,0 +1,31 @@
+# Security headers applied to every static asset response (Cloudflare Workers static assets).
+# These are the safe, non-breaking hardening wins. A strict Content-Security-Policy is
+# intentionally omitted because the app relies on inline scripts/styles plus several CDNs
+# (Google Fonts, unpkg/Lenis, PeerJS, analytics) — add one later once those are enumerated.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
+
+# Long-cache the fingerprinted static assets (js/css are versioned with ?v=N in the HTML)
+/js/*
+  Cache-Control: public, max-age=31536000
+/css/*
+  Cache-Control: public, max-age=31536000
+
+# HTML must always revalidate so a stale index.html can never pair with newer js/* —
+# that mismatch is what stranded signed-in players on a blank/erroring page before.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Keep the default *.workers.dev URL out of search results so only the custom
+# domain (sorcerychess.com) is indexed — this avoids duplicate-content penalties.
+# Host-scoped rules in _headers match the full URL, so this applies ONLY on the
+# workers.dev subdomain, never on sorcerychess.com. /* covers every page, not just root.
+https://sorcery-chess.atharva-shukla2367.workers.dev/*
+  X-Robots-Tag: noindex

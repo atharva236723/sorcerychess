@@ -1,0 +1,296 @@
+/* === Sorcery Chess · board.css ===
+   Spellcasters codex (sigils + spell demos), the 3D game board, pieces, new-game intro cascade, flying ghosts.
+   Auto-split from the original single-file index.html. Linked in a fixed cascade
+   order (base → home → board → components → themes → responsive); do not reorder. */
+
+  /* ===== Spellcasters codex (page-codex): sigil portraits + live spell demos ===== */
+  .herolink{display:inline-block; margin-top:14px; color:var(--magic); font-size:13px;
+    font-weight:700; letter-spacing:1px; text-decoration:none; opacity:.9;
+    transition:opacity .15s ease, text-shadow .15s ease;}
+  .herolink:hover{opacity:1; text-shadow:0 0 14px rgba(61,169,255,.6);}
+  .codexwrap{max-width:1060px; margin:30px auto 0; padding:0 6px;}
+  .codex-hero{text-align:center; margin-bottom:6px;}
+  .codex-kicker{font-size:12px; letter-spacing:5px; text-transform:uppercase; color:var(--magic); font-weight:800;}
+  .codex-hero h2{font-size:30px; letter-spacing:5px; text-transform:uppercase; font-weight:800; margin:10px 0 10px;
+    text-shadow:0 0 26px rgba(61,169,255,.35);}
+  .codex-sub{max-width:680px; margin:0 auto; font-size:13.5px; line-height:1.7; color:var(--muted);}
+
+  .spell{position:relative; background:var(--glass);
+    -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+    border:1px solid var(--glass-bd); border-radius:18px; box-shadow:var(--glass-sh);
+    padding:24px 26px; margin-top:24px; overflow:hidden;}
+  .spell::before{content:''; position:absolute; top:-45%; right:-12%; width:320px; height:320px;
+    background:radial-gradient(circle, rgba(61,169,255,.14), transparent 70%); pointer-events:none;}
+  .spell-head{display:flex; align-items:center; gap:14px; position:relative;}
+  .spell-rune{width:52px; height:52px; flex:none; border-radius:14px; background:#fff; color:#000;
+    display:flex; align-items:center; justify-content:center; font-size:27px;
+    border:2px solid var(--magic); box-shadow:0 0 18px rgba(61,169,255,.45);}
+  .spell-head h3{font-size:21px; letter-spacing:2px; text-transform:uppercase; font-weight:800;}
+  .spell-tag{font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--magic); font-weight:700;}
+  .spell-body{display:grid; grid-template-columns:208px 1fr 268px; gap:26px; align-items:center; margin-top:20px;}
+  .spell-left{display:flex; flex-direction:column; align-items:center;}
+  .spell-mid{align-self:center;}
+  .spell-lore{font-size:13.5px; line-height:1.7; color:var(--muted);}
+  .spell-lore b{color:var(--ink);}
+  .spell-how{list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:14px;}
+  .spell-how li{display:flex; gap:10px; align-items:flex-start; font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .spell-how li b{color:var(--ink);}
+  .spell-how li .n{flex:none; width:20px; height:20px; border-radius:50%; background:var(--soft-hi);
+    color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800;}
+  .spell-stats{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:14px;}
+  .spell-chip{font-size:10px; letter-spacing:1px; text-transform:uppercase; font-weight:700; color:var(--ink);
+    background:var(--soft); border:1px solid var(--glass-bd); border-radius:999px; padding:4px 10px;}
+
+  /* sigil portrait */
+  .sigil{width:100%; max-width:200px; height:auto; overflow:visible;}
+  .sigil .runes{fill:none; stroke:var(--magic); stroke-opacity:.5; stroke-width:1.5; stroke-dasharray:2 10; stroke-linecap:round;}
+  .sigil .runes.thin{stroke-opacity:.3; stroke-width:1; stroke-dasharray:14 8;}
+  .sigil .spin{transform-origin:100px 100px; animation:sigspin 30s linear infinite;}
+  .sigil .spin-rev{transform-origin:100px 100px; animation:sigspin 22s linear infinite reverse;}
+  .sigil .disc{fill:rgba(255,255,255,.035); stroke:rgba(255,255,255,.12); stroke-width:1;}
+  .sigil .glyph{font-size:62px; font-weight:700; fill:var(--ink); text-anchor:middle;
+    font-family:'Inter',Arial,sans-serif; filter:drop-shadow(0 0 10px rgba(61,169,255,.5));}
+  .sigil .motif{font-size:18px; fill:var(--magic); text-anchor:middle; opacity:.85;}
+  @keyframes sigspin{to{transform:rotate(360deg);}}
+
+  /* live spell demo (the looping "video") */
+  .spell-demo{align-self:center;}
+  .demo-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  .demo-head>span{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--magic);
+    font-weight:800; display:flex; align-items:center; gap:7px;}
+  .demo-live-dot{width:7px; height:7px; border-radius:50%; background:var(--magic);
+    box-shadow:0 0 8px var(--magic); animation:livepulse 1.4s ease-in-out infinite;}
+  @keyframes livepulse{0%,100%{opacity:.4; transform:scale(.8);} 50%{opacity:1; transform:scale(1.3);}}
+  .demo-board{position:relative; display:flex; justify-content:center;}
+  .demo-grid{position:relative; width:calc(var(--dcell)*5); height:calc(var(--dcell)*5);
+    border-radius:8px; overflow:hidden; border:1px solid var(--glass-bd);
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.5);}
+  .demo-sq{position:absolute; width:var(--dcell); height:var(--dcell); top:0; left:0;}
+  .demo-sq.light{background:#f3f3f3;}
+  .demo-sq.dark{background:#141414;}
+  .demo-pc{position:absolute; top:0; left:0; width:var(--dcell); height:var(--dcell);
+    display:flex; align-items:center; justify-content:center; pointer-events:none;
+    transition:transform .55s cubic-bezier(.4,0,.2,1); z-index:2;}
+  .demo-pc .pc-glyph{position:relative; width:74%; height:74%; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:calc(var(--dcell)*.46); font-weight:700; line-height:1;
+    box-shadow:0 2px 7px rgba(0,0,0,.55);
+    transition:transform .45s cubic-bezier(.34,1.42,.5,1), opacity .45s ease, box-shadow .3s ease, filter .3s ease;}
+  .demo-pc.wht .pc-glyph{background:#fff; color:#000; border:1.5px solid #000;}
+  .demo-pc.blk .pc-glyph{background:#000; color:#fff; border:1.5px solid #fff;}
+  .demo-pc.mag .pc-glyph{background:#fff; color:#000; border:2px solid var(--magic);
+    box-shadow:0 0 13px rgba(61,169,255,.65);}
+  .demo-pc.casting .pc-glyph{animation:castpulse .6s ease;}
+  @keyframes castpulse{0%{transform:scale(1);} 40%{transform:scale(1.18);
+    box-shadow:0 0 22px rgba(61,169,255,.95);} 100%{transform:scale(1);}}
+  .demo-pc.dead .pc-glyph{opacity:0; transform:scale(.3) rotate(38deg);}
+  .demo-pc.rise .pc-glyph{animation:riseIn .6s cubic-bezier(.34,1.42,.5,1);}
+  @keyframes riseIn{0%{opacity:0; transform:scale(.2) translateY(8px);} 100%{opacity:1; transform:none;}}
+  .demo-pc.grave .pc-glyph{opacity:.34; filter:grayscale(1); border-style:dashed;}
+  .demo-pc.is-freeze .pc-glyph{filter:brightness(1.25) saturate(0); border-color:var(--magic);
+    box-shadow:0 0 14px rgba(61,169,255,.8), inset 0 0 8px rgba(61,169,255,.4);}
+  .pc-tag{position:absolute; width:46%; height:46%; border-radius:50%; display:flex;
+    align-items:center; justify-content:center; font-size:calc(var(--dcell)*.24); z-index:3;
+    line-height:1; animation:tagpop .35s cubic-bezier(.34,1.6,.5,1);}
+  .pc-tag.poison{top:-3px; right:-3px; background:#000; color:#fff; border:1px solid #fff;}
+  .pc-tag.freeze{bottom:-3px; right:-3px; background:#fff; color:#000; border:1px solid var(--magic);}
+  @keyframes tagpop{from{transform:scale(0);} to{transform:scale(1);}}
+  .demo-beam{position:absolute; height:2px; top:0; left:0; transform-origin:0 50%; z-index:1;
+    background:linear-gradient(90deg, transparent, var(--magic), #fff, var(--magic), transparent);
+    box-shadow:0 0 9px var(--magic); animation:beamfade .85s ease forwards; pointer-events:none;}
+  @keyframes beamfade{0%{opacity:0;} 22%{opacity:1;} 100%{opacity:0;}}
+  .demo-caption{margin-top:13px; min-height:36px; font-size:12.5px; color:var(--muted);
+    line-height:1.5; text-align:center;}
+  .codex-foot{text-align:center; margin:40px 0 10px;}
+  /* "Take them into battle" — the same white primary CTA the home hero uses (the base
+     button{} rules don't reach an <a>, so it's spelled out here). Breathing glow +
+     hover light-sweep reuse ctaGlow/ctaShine from components.css. */
+  .codex-foot .cta{
+    display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+    font-family:'Inter',Arial,sans-serif; font-weight:800; font-size:16px; letter-spacing:1.4px;
+    color:#000; background:linear-gradient(180deg,#ffffff,#d9d9d9);
+    border:none; border-radius:14px; padding:16px 40px; cursor:pointer;
+    position:relative; overflow:hidden;
+    box-shadow:0 2px 0 #000, 0 6px 18px rgba(0,0,0,.45);
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+    animation:ctaGlow 2.8s ease-in-out infinite;
+  }
+  .codex-foot .cta:hover{
+    transform:translateY(-2px);
+    background:linear-gradient(180deg,#ffffff,#ececec);
+    box-shadow:0 4px 0 #000, 0 10px 26px rgba(0,0,0,.55);
+  }
+  .codex-foot .cta:active{transform:translateY(0); box-shadow:0 1px 0 #000, 0 2px 6px rgba(0,0,0,.4);}
+  .codex-foot .cta::after{
+    content:""; position:absolute; top:0; left:-150%; width:55%; height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.6), transparent);
+    transform:skewX(-18deg); pointer-events:none;
+  }
+  .codex-foot .cta:hover::after{animation:ctaShine .85s ease;}
+  @media (prefers-reduced-motion:reduce){
+    .codex-foot .cta{animation:none;}
+    .codex-foot .cta:hover::after{animation:none;}
+  }
+  @media (max-width:1080px){
+    .spell-body{grid-template-columns:200px 1fr;}
+    .spell-demo{grid-column:1 / -1; margin-top:6px;}
+    .demo-board{margin-top:2px;}
+  }
+  @media (max-width:680px){
+    .codex-hero h2{font-size:24px; letter-spacing:3px;}
+    .spell{padding:20px 18px;}
+    .spell-body{grid-template-columns:1fr; gap:18px; justify-items:center; text-align:center;}
+    .spell-mid{text-align:left;}
+    .spell-how li{text-align:left;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .sigil .spin,.sigil .spin-rev,.demo-live-dot{animation:none;}
+    .demo-pc,.demo-pc .pc-glyph{transition:none;}
+  }
+
+  h1{font-size:22px; letter-spacing:2px; font-weight:800; text-transform:uppercase;}
+  /* width is pinned to the board so changing status text can never stretch the wrap —
+     a wider wrap used to shift the perspective origin and visibly re-project the slab */
+  .board-wrap{
+    display:flex; flex-direction:column; gap:10px;
+    width:calc(var(--cell)*var(--cols) + 6px); flex:0 0 auto;
+    perspective:1500px; perspective-origin:50% 28%;
+  }
+  .gtimer{
+    min-width:60px; padding:4px 10px; border-radius:8px; text-align:center;
+    font-weight:800; font-size:14px; letter-spacing:1px; font-variant-numeric:tabular-nums;
+    background:#0d0d0d; border:1px solid var(--line); color:var(--muted);
+  }
+  .gtimer.active{background:#fff; color:#000; border-color:#fff; box-shadow:0 0 10px rgba(255,255,255,.35);}
+  .gtimer.danger{color:#ff4d4d; border-color:#ff4d4d;}
+  .gtimer.active.danger{background:#ff4d4d; color:#fff; animation:checkflash 1s ease infinite;}
+  body.notimer .gtimer{display:none;} /* a timer-free match hides the clocks entirely */
+  .titlebar{display:flex; justify-content:space-between; align-items:center; gap:10px; min-width:0;}
+  .titlebar h1{font-size:17px; white-space:nowrap;}
+  #status{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; letter-spacing:.6px;
+    flex:1; min-width:0; justify-content:flex-end; white-space:nowrap; overflow:hidden;}
+  #status .dot{width:13px; height:13px; border-radius:50%; flex:0 0 auto;}
+  #status .dot.white{background:#fff; border:2px solid #444;}
+  #status .dot.black{background:#000; border:2px solid #ccc;}
+  #checkMsg{color:#ff4d4d; font-weight:800; letter-spacing:2px; text-transform:uppercase;
+    animation:checkflash 1s ease infinite;}
+  @keyframes checkflash{0%,100%{opacity:1}50%{opacity:.4}}
+  .cell.last-move{box-shadow:inset 0 0 0 3px rgba(145,145,145,.85);}
+  .cell.king-check{animation:checkpulse 1s ease infinite;}
+  @keyframes checkpulse{
+    0%,100%{box-shadow:inset 0 0 0 3px #ff4d4d, inset 0 0 10px 3px rgba(255,77,77,.45);}
+    50%{box-shadow:inset 0 0 0 4px #ff4d4d, inset 0 0 26px 9px rgba(255,77,77,.85);}
+  }
+  #board{
+    display:grid;
+    grid-template-columns:repeat(var(--cols),var(--cell));
+    grid-template-rows:repeat(var(--cols),var(--cell));
+    border:3px solid #fff; outline:3px solid #000;
+    transform:rotateX(var(--tilt)); transform-style:preserve-3d;
+    margin:calc(var(--cell)*-0.6) 0 calc(var(--cell)*0.05);
+    /* foreshortening compensation scales with tilt (0 when flat); capped for steep angles */
+    margin-top:max(calc(var(--cell)*-3.5*(1 - cos(var(--tilt)))), calc(var(--cell)*-1));
+  }
+  #board::after{ /* dark underside plane = soft floating shadow (gradient, no filter — blur is too costly here) */
+    content:''; position:absolute; inset:-22px;
+    transform:translateZ(-16px);
+    background:radial-gradient(closest-side, rgba(0,0,0,.62), rgba(0,0,0,.45) 72%, transparent);
+  }
+  /* the slab's four side faces, folded down from each rim (re-appended on every render) */
+  .edge{position:absolute; background:linear-gradient(180deg,#e6e6e6,#8d8d8d 50%,#3f3f3f); pointer-events:none;}
+  .edge.eS{left:-3px; right:-3px; top:100%; height:16px; transform-origin:top; transform:rotateX(-90deg); border:3px solid #000; border-top:none;}
+  .edge.eN{left:-3px; right:-3px; bottom:100%; height:16px; transform-origin:bottom; transform:rotateX(90deg); border:3px solid #000; border-bottom:none;}
+  .edge.eW{top:-3px; bottom:-3px; right:100%; width:16px; transform-origin:right; transform:rotateY(-90deg); border:3px solid #000; border-right:none; background:linear-gradient(90deg,#e6e6e6,#8d8d8d 50%,#3f3f3f);}
+  .edge.eE{top:-3px; bottom:-3px; left:100%; width:16px; transform-origin:left; transform:rotateY(90deg); border:3px solid #000; border-left:none; background:linear-gradient(-90deg,#e6e6e6,#8d8d8d 50%,#3f3f3f);}
+  /* ---- new-game intro: the slab drops in and materialises centre-out, then pieces spawn ---- */
+  #board.intro{animation:boardIn .85s cubic-bezier(.22,1,.36,1) backwards;}
+  @keyframes boardIn{
+    from{transform:translateY(-44px) rotateX(var(--tilt)) scale(.96); border-color:transparent; outline-color:transparent;}
+    to{transform:translateY(0) rotateX(var(--tilt)) scale(1); border-color:#fff; outline-color:#000;}
+  }
+  #board.intro .cell{animation:fadein .5s ease backwards;} /* per-cell centre-out delay set inline */
+  #board.intro .edge{animation:fadein .55s ease .5s backwards;}
+  #board.intro::after{animation:fadein .8s ease .2s backwards;}
+  @keyframes fadein{from{opacity:0;} to{opacity:1;}}
+  .cell{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; user-select:none; transform-style:preserve-3d;
+    /* manipulation = no 300ms double-tap-zoom wait, so a single tap registers
+       instantly on mobile (small squares were eating rapid taps as zoom gestures) */
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+  }
+  .cell.light{background:var(--sq-light);}
+  .cell.dark{background:var(--sq-dark);}
+  .cell.selected::after{
+    content:''; position:absolute; inset:0; border:3px solid #000; outline:2px solid #fff; outline-offset:-5px;
+    pointer-events:none;
+  }
+  .cell.move-target::before{
+    content:''; position:absolute; width:14px; height:14px; border-radius:50%;
+    background:rgba(0,0,0,.55); border:2px solid rgba(255,255,255,.85); pointer-events:none;
+  }
+  .cell.capture-target::before{
+    content:''; position:absolute; inset:1px; border-radius:50%;
+    border:3px solid #fff; box-shadow:0 0 0 2px #000, 0 0 12px 3px rgba(255,255,255,.95),
+      inset 0 0 10px 2px rgba(255,255,255,.55);
+    pointer-events:none; z-index:3;
+    animation:pulse 1.1s ease infinite;
+  }
+  .cell.ability-target::before{
+    content:''; position:absolute; inset:1px; border-radius:10px;
+    border:3px dashed var(--magic); box-shadow:0 0 12px 3px rgba(61,169,255,.9),
+      inset 0 0 10px 2px rgba(61,169,255,.55);
+    pointer-events:none; z-index:3;
+    animation:pulse 1.1s ease infinite;
+  }
+  /* .piece is a flat anchor in the board plane (slide animations translate it);
+     .pbody is the visible glyph disc, lifted half its height and counter-rotated
+     against BOTH view axes so it always stands upright facing the camera */
+  .piece{
+    width:calc(var(--cell)*.83); height:calc(var(--cell)*.83);
+    line-height:1; position:relative; z-index:1;
+    will-change:transform; transform-style:preserve-3d;
+  }
+  .pbody{
+    position:absolute; inset:0; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:calc(var(--cell)*.52);
+    /* the upright disc is taller than a foreshortened cell, so the front (white) rank
+       would drop below the board's front edge — nudge every disc up the board plane to
+       re-centre it on its square; sin(tilt) makes the correction vanish in 2D mode */
+    transform:translateZ(calc(var(--cell)*.42)) translateY(calc(var(--cell)*-.27*sin(var(--tilt)))) rotateX(calc(-1*var(--tilt)));
+  }
+  .piece.special .pbody{font-size:calc(var(--cell)*.46);}
+  .piece::after{ /* shadow pooling on the board beneath the standing disc */
+    content:''; position:absolute; left:8%; right:8%; top:8%; bottom:8%; border-radius:50%;
+    background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.55), transparent 72%);
+    pointer-events:none;
+  }
+  .ghostfly::after{display:none;}
+  .piece.white .pbody{background:#fff; color:#000; border:2px solid #000; box-shadow:0 1px 3px rgba(0,0,0,.5);}
+  .piece.black .pbody{background:#000; color:#fff; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.5);}
+  .piece.sliding{z-index:5;}
+  @keyframes spawnIn{from{transform:scale(0) rotate(-180deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
+  .ghostfly.white{background:#fff; color:#000; border:2px solid #000; box-shadow:0 1px 3px rgba(0,0,0,.5);}
+  .ghostfly.black{background:#000; color:#fff; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.5);}
+  /* opacity on the anchor would flatten its 3D children, so fade the disc instead */
+  .piece.frozen .pbody{opacity:.55;}
+  /* ghost piece flying between the board and a graveyard */
+  .ghostfly{
+    position:fixed; z-index:9; pointer-events:none; will-change:transform;
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    transition:transform .55s cubic-bezier(.45,.1,.25,1);
+  }
+  /* blue aura while a piece is travelling during a magical swap */
+  .piece.magic .pbody{
+    box-shadow:0 0 16px 5px rgba(61,169,255,.9), 0 0 4px 1px rgba(61,169,255,.8),
+      inset 0 0 8px 2px rgba(61,169,255,.45);
+  }
+  .tag{
+    position:absolute; font-size:10px; font-weight:700; line-height:1;
+    padding:1px 3px; border-radius:4px; z-index:2;
+  }
+  .tag.poison{top:-2px; right:-2px; background:#000; color:#fff; border:1px solid #fff;}
+  .tag.freeze{bottom:-2px; right:-2px; background:#fff; color:#000; border:1px solid #000;}
+  .tag.wcd{top:-2px; left:-2px; background:#000; color:var(--magic); border:1px solid var(--magic);}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorcery Chess — Poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c0c; --ink:#f2f2f2; --muted:#9a9a9a; --magic:#3da9ff; --danger:#ff4d4d;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:#000; display:flex; justify-content:center; padding:24px;
+    font-family:'Inter',Arial,sans-serif; color:var(--ink);
+  }
+  /* ---- the poster itself : 850 × 1100 (US-letter ratio, scales for print) ---- */
+  .poster{
+    width:850px; min-height:1100px; background:
+      radial-gradient(1100px 500px at 50% -8%, rgba(61,169,255,.16), transparent 60%),
+      radial-gradient(700px 400px at 85% 105%, rgba(61,169,255,.10), transparent 60%),
+      var(--bg);
+    border:1px solid #2a2a2a; position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  /* checkerboard ribbons top & bottom */
+  .checker{
+    height:26px; flex:0 0 auto;
+    background:
+      repeating-conic-gradient(#fff 0% 25%, #000 0% 50%) 0 0 / 52px 52px;
+    border-bottom:2px solid #fff;
+  }
+  .checker.bottom{border-bottom:none; border-top:2px solid #fff;}
+  .inner{flex:1; display:flex; flex-direction:column; padding:48px 56px 36px; gap:30px;}
+
+  /* ---- header ---- */
+  header{text-align:center; display:flex; flex-direction:column; gap:10px; align-items:center;}
+  .kicker{
+    font-size:13px; font-weight:700; letter-spacing:6px; text-transform:uppercase; color:var(--magic);
+  }
+  h1{
+    font-size:76px; font-weight:900; letter-spacing:6px; text-transform:uppercase; line-height:1;
+    text-shadow:0 0 28px rgba(61,169,255,.55), 0 2px 0 #000;
+  }
+  h1 .star{color:var(--magic); text-shadow:0 0 22px rgba(61,169,255,.95);}
+  .tagline{font-size:20px; font-weight:600; color:var(--muted); letter-spacing:1px;}
+  .tagline b{color:var(--ink);}
+  .boardbadge{
+    margin-top:6px; display:inline-flex; align-items:center; gap:12px;
+    border:2px solid #fff; border-radius:999px; padding:8px 22px;
+    background:#000; font-weight:800; letter-spacing:3px; font-size:15px; text-transform:uppercase;
+    box-shadow:0 0 18px rgba(61,169,255,.35);
+  }
+  .boardbadge span{color:var(--magic);}
+
+  /* ---- versus table ---- */
+  .versus{
+    border:1px solid #2e2e2e; border-radius:16px; overflow:hidden;
+    background:linear-gradient(180deg,#161616,#101010);
+  }
+  .versus .vhead{display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid #2e2e2e;}
+  .versus .vhead div{
+    padding:13px 20px; font-weight:800; letter-spacing:3px; text-transform:uppercase; font-size:14px; text-align:center;
+  }
+  .versus .vhead .old{color:#777; background:rgba(255,255,255,.03);}
+  .versus .vhead .new{color:var(--magic); background:rgba(61,169,255,.08); text-shadow:0 0 12px rgba(61,169,255,.6);}
+  .vrow{display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid #222;}
+  .vrow:last-child{border-bottom:none;}
+  .vrow div{padding:11px 20px; font-size:14.5px; line-height:1.45;}
+  .vrow .old{color:#8a8a8a; background:rgba(255,255,255,.02);}
+  .vrow .new{color:var(--ink); font-weight:600; background:rgba(61,169,255,.05);}
+  .vrow .new em{color:var(--magic); font-style:normal;}
+
+  /* ---- magic pieces ---- */
+  .sect{font-size:15px; font-weight:800; letter-spacing:4px; text-transform:uppercase; text-align:center;}
+  .sect span{color:var(--magic);}
+  .pieces{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .pcard{
+    border:1px solid #2e2e2e; border-radius:16px; padding:16px 18px;
+    display:flex; gap:14px; align-items:flex-start;
+    background:linear-gradient(180deg,#181818,#101010);
+  }
+  .pcard .glyph{
+    flex:0 0 54px; width:54px; height:54px; border-radius:50%;
+    background:#fff; color:#000; border:3px solid #000; outline:2px solid #fff;
+    display:flex; align-items:center; justify-content:center; font-size:30px;
+    box-shadow:0 0 16px rgba(61,169,255,.45);
+  }
+  .pcard b{font-size:15px; letter-spacing:2.5px; font-weight:800; display:block; margin-bottom:3px;}
+  .pcard b small{color:var(--magic); font-size:10.5px; letter-spacing:2px; font-weight:700; margin-left:6px; white-space:nowrap;}
+  .pcard p{font-size:12.8px; line-height:1.55; color:var(--muted);}
+  .pcard p i{color:var(--ink); font-style:normal; font-weight:600;}
+
+  /* ---- footer / CTA ---- */
+  footer{margin-top:auto; display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center;}
+  .rules{font-size:13px; color:var(--muted); letter-spacing:.5px;}
+  .rules b{color:var(--ink);}
+  .rules .chk{color:var(--danger); font-weight:800;}
+  .cta{
+    font-size:19px; font-weight:900; letter-spacing:3px; text-transform:uppercase; white-space:nowrap;
+    border:2px solid var(--magic); border-radius:14px; padding:15px 38px; background:#000;
+    box-shadow:0 0 26px rgba(61,169,255,.5), inset 0 0 18px rgba(61,169,255,.18);
+  }
+  .cta span{color:var(--magic);}
+  @media print{
+    body{padding:0; background:#fff;}
+    .poster{border:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="poster">
+  <div class="checker"></div>
+  <div class="inner">
+
+    <header>
+      <div class="kicker">Two players · One board · Zero mercy</div>
+      <h1><span class="star">✶</span> Sorcery Chess <span class="star">✶</span></h1>
+      <div class="tagline">The royal game — <b>with magic in the ranks.</b></div>
+      <div class="boardbadge">12 × 12 board <span>·</span> 144 squares <span>·</span> 48 pieces</div>
+    </header>
+
+    <div class="versus">
+      <div class="vhead"><div class="old">♟ Ordinary chess</div><div class="new">✶ Sorcery chess</div></div>
+      <div class="vrow"><div class="old">8 × 8 board, 64 squares</div>
+        <div class="new">A vast <em>12 × 12</em> battlefield — 144 squares of open war</div></div>
+      <div class="vrow"><div class="old">6 piece types, unchanged for 500 years</div>
+        <div class="new"><em>10 piece types</em> — every classic piece, plus 4 spellcasters</div></div>
+      <div class="vrow"><div class="old">Captured pieces are gone forever</div>
+        <div class="new">The dead wait in the <em>graveyard</em> — the Witch can raise them</div></div>
+      <div class="vrow"><div class="old">No status effects — a piece is fine until it isn't</div>
+        <div class="new"><em>Poison</em> kills on a 2-move timer · <em>Frost</em> locks pieces in place</div></div>
+      <div class="vrow"><div class="old">Every duel slowly drains into an endgame</div>
+        <div class="new">Swaps, revivals and curses keep the board <em>alive to the last move</em></div></div>
+    </div>
+
+    <div class="sect">Meet the <span>spellcasters</span></div>
+    <div class="pieces">
+      <div class="pcard"><div class="glyph">✶</div><div><b>THE WIZARD <small>2 CHARGES</small></b>
+        <p>Glides like a bishop. Marks an enemy down his diagonal with a <i>lethal poison</i> and swaps
+        into its square — the victim has two moves to live.</p></div></div>
+      <div class="pcard"><div class="glyph">⚗</div><div><b>THE ALCHEMIST <small>UNLIMITED</small></b>
+        <p>The only antidote on the board. Reaches a <i>poisoned ally</i> along her diagonals,
+        cures the curse, and trades places to cover the retreat.</p></div></div>
+      <div class="pcard"><div class="glyph">⚚</div><div><b>THE WITCH <small>ULTIMATE SACRIFICE</small></b>
+        <p>Walks one square like a king. Performs the forbidden ritual: <i>revives any fallen piece</i>
+        from the graveyard — and dies in its place.</p></div></div>
+      <div class="pcard"><div class="glyph">❅</div><div><b>THE FREEZER <small>NEVER CAPTURES</small></b>
+        <p>Slides like a rook but sheds no blood. <i>Freezes an enemy solid</i> for three moves and swaps
+        into its square — even a queen can be put on ice.</p></div></div>
+    </div>
+
+    <footer>
+      <div class="rules">All the rules you know still rule — <span class="chk">check</span>,
+        <b>checkmate</b> and <b>stalemate</b> — but now a freeze can save your king,
+        and a poison can topple a fortress.</div>
+      <div class="cta">Play free <span>·</span> In your browser <span>·</span> No install</div>
+      <div class="rules">Open <b>index.html</b> and make your first move.</div>
+    </footer>
+
+  </div>
+  <div class="checker bottom"></div>
+</div>
+
+</body>
+</html>

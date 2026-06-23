@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PYW0RG12M0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PYW0RG12M0');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Points &amp; Ranks — Sorcery Chess | Scoring &amp; Rating System</title>
+<meta name="description" content="How scoring works in Sorcery Chess — earn rating points by winning, scaled per variant, climb a ladder of 17 ranks from Junior to The Monarch. See exactly how renown is earned and lost.">
+<meta name="keywords" content="Sorcery Chess scoring, chess rating, chess ranks, points system, chess ladder, rating points">
+<meta name="author" content="Sorcery Chess">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://sorcerychess.com/points.html">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="color-scheme" content="dark light">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sorcery Chess">
+<meta property="og:url" content="https://sorcerychess.com/points.html">
+<meta property="og:title" content="Points &amp; Ranks — Sorcery Chess">
+<meta property="og:description" content="How rating points are earned, scaled per variant, and how they climb the 17-rank ladder from Junior to The Monarch.">
+<meta property="og:image" content="https://sorcerychess.com/sorcery-chess-poster-1080x1080.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Points &amp; Ranks — Sorcery Chess">
+<meta name="twitter:description" content="The Sorcery Chess scoring system — points, ranks and the 17-rung ladder.">
+<meta name="twitter:image" content="https://sorcerychess.com/sorcery-chess-poster-1080x1080.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Points & Ranks",
+  "url": "https://sorcerychess.com/points.html",
+  "description": "The Sorcery Chess scoring and rating system — points, ranks and the 17-rung ladder.",
+  "isPartOf": { "@type": "WebSite", "name": "Sorcery Chess", "url": "https://sorcerychess.com/" },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sorcerychess.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Points & Ranks", "item": "https://sorcerychess.com/points.html" }
+    ]
+  }
+}
+</script>
+
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="manifest" href="site.webmanifest" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css?v=8">
+<link rel="stylesheet" href="css/components.css?v=7">
+<link rel="stylesheet" href="css/points.css?v=3">
+<link rel="stylesheet" href="css/themes.css?v=4">
+<link rel="stylesheet" href="css/pages.css?v=3">
+<link rel="stylesheet" href="css/transitions.css?v=1">
+<script>(function(){try{var ids=['light','crimson','sapphire','emerald','amethyst'];
+var t=localStorage.getItem('sorceryChessTheme');
+if(ids.indexOf(t)>=0){document.documentElement.classList.add('theme-'+t);
+document.addEventListener('DOMContentLoaded',function(){document.body.classList.add('theme-'+t);});}
+}catch(e){}})();</script>
+</head>
+<body class="standalone">
+<div id="bgfx" aria-hidden="true"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+<nav class="site-nav">
+  <a class="brand" href="index.html">♚ Sorcery Chess</a>
+  <a class="nav-l" href="index.html">Home</a>
+  <a class="nav-l" href="codex.html">Spellcasters</a>
+  <a class="nav-l" href="leaderboard.html">Leaderboard</a>
+  <a class="nav-l" href="points.html">Scoring</a>
+  <a class="nav-l" href="about.html">About</a>
+  <a class="nav-l" href="contact.html">Contact</a>
+  <a class="nav-l" href="privacy.html">Privacy</a>
+  <a class="nav-l" href="terms.html">Terms</a>
+  <span class="spacer"></span>
+  <a class="nav-cta" href="index.html">▶ Play now</a>
+</nav>
+
+<main class="page-main">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> › <span>Points &amp; Ranks</span></nav>
+  <section id="page-points" class="page doc active">
+  <div class="ptswrap">
+    <div class="pts-hero">
+      <span class="pts-kicker">The Ledger of Renown</span>
+      <h2>Points &amp; Ranks</h2>
+      <p class="pts-sub">Every victory is paid in rating points — and not every battlefield pays alike.
+        Here is exactly how renown is earned, how it bleeds, and how it carries you up the seventeen
+        ranks from Junior to The Monarch.</p>
+    </div>
+
+    <div class="pts-you" id="ptsYou"></div>
+
+    <div class="pts-sec">
+      <h3>⚖ How a battle pays</h3>
+      <p class="pts-p">Each kind of chess carries its own <b>stakes multiplier</b>. Classic is the baseline;
+        Sorcery's spellcasters make every game harder, so it pays half again as much. The very same
+        multiplier scales the penalty for losing — the richer the reward, the heavier the fall.</p>
+      <div class="pts-variants" id="ptsVariants"></div>
+      <p class="pts-foot-note">🌐 Online duels are friendly exhibitions — they never touch your rating, win or lose.</p>
+    </div>
+
+    <div class="pts-sec pts-grid2">
+      <div class="pts-card">
+        <span class="pc-ico">⚔</span>
+        <h4>Defeats are tracked per game</h4>
+        <p>Conquering the Apprentice in <b>Sorcery</b> Chess does <b>not</b> mark it beaten in
+          Classic. Every chess type keeps its own roll of vanquished foes — so the dread opponents must
+          be earned again on each board you set foot upon.</p>
+      </div>
+      <div class="pts-card">
+        <span class="pc-ico">🔒</span>
+        <h4>The dread foes are earned</h4>
+        <p>The <b>Malevolent</b> stays sealed until you defeat the Apprentice, Sorcerer and Archmage <i>of
+          that variant</i>. The <b>Dominion</b> opens only once all four lesser minds have fallen. They are
+          always timed — and they pay the most.</p>
+      </div>
+      <div class="pts-card peril">
+        <span class="pc-ico">☠</span>
+        <h4>The price of falling</h4>
+        <p>Through the lower ranks, defeat costs you nothing. But once you rise <b>above the Arcanum</b>
+          (Spellblade and beyond), every loss drains rating — scaled by the variant, exactly like its wins.
+          Glory carries a ransom.</p>
+      </div>
+      <div class="pts-card">
+        <span class="pc-ico">📜</span>
+        <h4>What never scores</h4>
+        <p>Draws pay nothing, and losses below the Arcanum cost nothing. Online matches are unranked. Only
+          the player — always White — earns rating; the computer's victories simply end the duel.</p>
+      </div>
+    </div>
+
+    <div class="pts-sec">
+      <h3>🜔 The seventeen ranks</h3>
+      <p class="pts-p">Points carry you up a fixed ladder. The ranks count down — a newcomer stands at
+        Rank 17, the Monarch reigns at Rank 1. Your current standing glows blue.</p>
+      <div class="pts-ladder" id="ptsLadder"></div>
+    </div>
+
+    <div class="pts-cta">
+      <a class="cta" href="index.html">▶ Earn your first points</a>
+      <a class="herolink" href="leaderboard.html">🏆 See the worldwide ladder →</a>
+    </div>
+  </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="frow">
+    <div class="fbrand">♚ Sorcery Chess
+      <span class="ftag">The royal game, twelve squares wide — strictly black &amp; white, strictly magical.</span>
+    </div>
+    <div class="fcol"><h4>Game</h4>
+      <a href="index.html">Home</a>
+      <a href="index.html">Play now</a>
+      <a href="codex.html">Spellcasters</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="points.html">Scoring</a>
+    </div>
+    <div class="fcol"><h4>Company</h4>
+      <a href="about.html">About us</a>
+      <a href="contact.html">Contact us</a>
+    </div>
+    <div class="fcol"><h4>Legal</h4>
+      <a href="privacy.html">Privacy policy</a>
+      <a href="terms.html">Terms &amp; conditions</a>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 Sorcery Chess — a local-only demo. Your data never leaves this device.</span>
+    <span>Made with ♟ and a little magic.</span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="js/smooth.js?v=1"></script>
+<script src="js/standalone.js?v=1"></script>
+<script src="js/state.js?v=5"></script>
+<script src="js/account.js?v=7"></script>
+<script src="js/profile.js?v=5"></script>
+<script src="js/points.js?v=2"></script>
+<script>try{ renderPoints(); }catch(e){ console.error('points init failed', e); }</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"6608142fc41b4fb8a13ff3dafaa86a23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

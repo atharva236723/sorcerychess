@@ -1,0 +1,33 @@
+/* === Sorcery Chess · spellkill.css ===
+   The "arcane slay" highlight: when one of the four spellcasters is selected and
+   can capture (kill) an enemy piece this turn, that target square gets a dramatic
+   magic-blue effect instead of the plain white capture ring — two counter-rotating
+   dashed rune rings, a pulsing aura and a swelling glow. Keyed off the .spell-kill
+   class render() adds to a spellcaster's capture targets. Magic blue only (never the
+   red reserved for check), in keeping with the board's strict palette. */
+
+/* recolour the base capture ring to arcane blue and make it breathe harder */
+.cell.spell-kill::before{
+  border-color:var(--magic);
+  box-shadow:0 0 0 2px #000, 0 0 16px 5px rgba(61,169,255,.95),
+    inset 0 0 12px 3px rgba(61,169,255,.6);
+  animation:skPulse 1s ease infinite;
+}
+/* a rotating dashed rune ring layered over the square (the cell isn't selected when
+   it's a capture target, so ::after is free for this extra flourish) */
+.cell.spell-kill::after{
+  content:''; position:absolute; inset:6%; border-radius:50%;
+  border:2px dashed rgba(61,169,255,.85);
+  box-shadow:0 0 14px 2px rgba(61,169,255,.55), inset 0 0 10px rgba(61,169,255,.4);
+  pointer-events:none; z-index:4;
+  animation:skSpin 2.4s linear infinite, skBreathe 1s ease infinite;
+}
+
+@keyframes skPulse{0%{transform:scale(1)}50%{transform:scale(1.32)}100%{transform:scale(1)}}
+@keyframes skSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes skBreathe{0%{opacity:.45}50%{opacity:1}100%{opacity:.45}}
+
+@media (prefers-reduced-motion:reduce){
+  .cell.spell-kill::before{animation:none;}
+  .cell.spell-kill::after{animation:none;}
+}

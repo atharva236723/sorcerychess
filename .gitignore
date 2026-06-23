@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Wrangler / Cloudflare build cache
+.wrangler/
+
+# Environment & secrets
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,305 @@
+/* === Sorcery Chess · base.css ===
+   Lenis reset, @property regs, :root design tokens, site shell, footer, rating ladder, live stats, Hall of Ascension layout.
+   Auto-split from the original single-file index.html. Linked in a fixed cascade
+   order (base → home → board → components → themes → responsive); do not reorder. */
+
+  /* Lenis' own reset — let content drive height and disable native smooth-scroll while Lenis runs */
+  html.lenis,html.lenis body{height:auto;}
+  .lenis.lenis-smooth{scroll-behavior:auto !important;}
+  .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain;}
+  .lenis.lenis-stopped{overflow:hidden;}
+  /* registered so it can be smoothly transitioned (plain custom props don't animate) */
+  @property --fs{ syntax:'<number>'; inherits:true; initial-value:0; }
+  :root{
+    --bg:#111; --panel:#1c1c1c; --line:#3a3a3a;
+    --sq-light:#ffffff; --sq-dark:#000000;
+    --ink:#f2f2f2; --muted:#9a9a9a; --magic:#3da9ff;
+    --tilt:34deg; /* camera pitch; 0 in 2D mode — piece discs counter-rotate to stay upright */
+
+    /* ===== theming engine (dark = default). A theme = a page background gradient
+       (set on html.theme-X) + this variable set (set on body.theme-X). --magic stays
+       fixed for the board's spellcaster glows; --accent carries the theme through the
+       site chrome (glass surfaces, glows, links). Surfaces use --glass + backdrop blur
+       for the glassmorphism look; overlays (hall/modals) keep their own dark --over*
+       palette so their light content stays readable in every theme. ===== */
+    --accent:#7c8cff; --accent-rgb:124,140,255;
+    --glass:linear-gradient(165deg, rgba(46,46,64,.55), rgba(20,20,30,.62));
+    --glass-strong:linear-gradient(155deg, rgba(52,52,72,.80), rgba(20,20,30,.88));
+    --glass-bd:rgba(255,255,255,.12);
+    --glass-bd-hi:rgba(var(--accent-rgb),.65);
+    --glass-sh:0 18px 46px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08);
+    --soft:rgba(255,255,255,.05); --soft-hi:rgba(255,255,255,.10);
+    --blur:16px;
+    --over:linear-gradient(170deg, rgba(28,28,42,.92), rgba(10,10,18,.95));
+    --over-bd:rgba(var(--accent-rgb),.32);
+    --over-ink:#f4f5fb; --over-muted:#9aa0b8; --over-line:rgba(255,255,255,.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:transparent; color:var(--ink);
+    font-family:'Inter',Arial,sans-serif; font-weight:400;
+    display:flex; flex-direction:column; min-height:100vh;
+    /* squares shrink so navbar + title + both graveyards + board always fit the viewport.
+       --fs eases 0→1 when entering fullscreen and --cell linearly crossfades between the
+       normal and fullscreen sizes, so the board (and every piece, sized off --cell) grows
+       perfectly smoothly. Declared on body — the same element --fs flips on — so --cell
+       re-substitutes every frame as --fs animates. */
+    /* --cols is the active board's column count (12 sorcery / 8 classic), set by render() so
+       the same fit math serves every variant; smaller boards simply get larger squares. */
+    --cols:12;
+    --cellnormal:clamp(24px, min(calc((100vh - 270px)/var(--cols)), calc((100vw - 430px)/var(--cols))), 56px);
+    --cellfs:clamp(28px, min(calc((100vh - 150px)/var(--cols)), calc((100vw - 400px)/var(--cols))), 110px);
+    --cell:calc(var(--cellnormal)*(1 - var(--fs)) + var(--cellfs)*var(--fs));
+    transition:--fs .62s cubic-bezier(.4,0,.2,1);
+  }
+  /* ---- site shell: auth screen gates everything; navbar switches .page views ---- */
+  .page{display:none;}
+  /* When signed out, the auth card is the ONLY thing on screen. A page can still be
+     marked .active from the last session, so hide every .page while not authed — else
+     logging out lets the home/play content show by scrolling under the login card.
+     Scope to the SPA shell only: the standalone MPA pages (codex, leaderboard, scoring,
+     legal) reuse .page for their content and are NEVER .authed, so they must be exempt —
+     they carry body.standalone, which this :not() excludes. */
+  body:not(.authed):not(.standalone) .page{display:none !important;}
+  /* entrance plays every switch: display none→shown restarts the animation. No fill mode,
+     so the transform clears afterwards (a lingering ancestor transform would re-anchor the
+     fixed-position .ghostfly ghosts on the play page). */
+  .page.active{animation:pageIn .38s cubic-bezier(.22,.7,.35,1);}
+  @keyframes pageIn{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:none;}
+  }
+  /* The home view is the heaviest page (many backdrop-filter glass cards + the 3D
+     showcase) and its blur backdrop is the FIXED #bgfx layer + body gradient. A
+     translateY entrance slides every glass card across that stationary backdrop, so
+     the browser re-rasterizes every blur on each frame — that's the lag returning
+     home. Fade only (no transform) keeps the geometry static, so each blur is
+     rasterized once. */
+  #page-home.active{animation:homeIn .38s ease-out;}
+  @keyframes homeIn{ from{opacity:0;} to{opacity:1;} }
+  @media (prefers-reduced-motion:reduce){
+    .page.active,#page-home.active{animation:none;}
+  }
+  #page-play.active{
+    display:flex; justify-content:center; align-items:flex-start;
+    gap:20px; padding:16px 20px;
+    transition:padding .62s cubic-bezier(.4,0,.2,1);
+  }
+  .page.doc.active{display:block; padding:10px 20px 44px;}
+  #topnav{
+    display:none; align-items:center; flex-wrap:wrap; gap:4px; padding:10px 22px;
+    background:var(--glass-strong); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+    border-bottom:1px solid var(--glass-bd); box-shadow:0 4px 24px rgba(0,0,0,.4);
+  }
+  body.authed #topnav{display:flex;}
+  /* while a match is on the board, strip the chrome so nothing competes with the game */
+  body.playing #topnav{display:none;}
+  #topnav .brand{font-weight:800; font-size:15px; letter-spacing:2px; text-transform:uppercase; margin-right:16px;
+    color:var(--ink); text-decoration:none; cursor:pointer; transition:opacity .15s ease, text-shadow .15s ease;}
+  #topnav .brand:hover{opacity:.85; text-shadow:0 0 14px rgba(61,169,255,.55);}
+  #topnav a.nl{
+    color:var(--muted); text-decoration:none; cursor:pointer;
+    font-size:13px; font-weight:600; letter-spacing:1px;
+    padding:7px 13px; border-radius:8px;
+    transition:color .15s ease, background .15s ease;
+  }
+  #topnav a.nl:hover{color:var(--ink); background:rgba(255,255,255,.07);}
+  #topnav a.nl.active{color:#000; background:#fff;}
+  #topnav .spacer{flex:1;}
+  #topnav .who{font-size:12.5px; color:var(--muted); margin-right:8px;}
+  #topnav .who b{color:var(--ink);}
+  @media (max-width:920px){ #topnav .who{display:none;} }
+  /* ---- site footer: only shown once authed (mirrors #topnav) ---- */
+  #footer{display:none;}
+  body.authed #footer{
+    display:block; margin-top:auto;
+    background:var(--glass-strong); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+    border-top:1px solid var(--glass-bd); color:var(--muted);
+    padding:26px 22px 20px;
+  }
+  body.playing #footer{display:none;} /* placed after the authed rule so it wins by source order */
+  #footer .frow{
+    display:flex; flex-wrap:wrap; gap:32px 56px;
+    max-width:1000px; margin:0 auto;
+  }
+  #footer .fbrand{font-weight:800; font-size:14px; letter-spacing:2px; text-transform:uppercase; color:var(--ink);}
+  #footer .fbrand .ftag{display:block; margin-top:6px; font:400 12px/1.6 'Inter',Arial,sans-serif; letter-spacing:0; text-transform:none; color:var(--muted); max-width:240px;}
+  #footer .fcol h4{margin:0 0 10px; font-size:11px; letter-spacing:1.4px; text-transform:uppercase; color:var(--ink);}
+  #footer .fcol a.fl{
+    display:block; color:var(--muted); text-decoration:none; cursor:pointer;
+    font-size:13px; padding:4px 0; transition:color .15s;
+  }
+  #footer .fcol a.fl:hover{color:var(--ink);}
+  #footer .fbot{
+    max-width:1000px; margin:22px auto 0; padding-top:14px;
+    border-top:1px solid var(--line); font-size:11.5px; color:var(--muted);
+    display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:space-between;
+  }
+  /* ---- rating ladder: 17 ranks, Junior → The Monarch, points from wins ---- */
+  .rankchip{
+    display:inline-block; margin-left:8px; padding:3px 10px;
+    border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.06);
+    color:var(--ink); font-size:10.5px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase;
+  }
+  .rankcard{
+    width:min(430px,100%); margin:26px auto 0; padding:16px 20px; text-align:left;
+    background:var(--glass); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+    border:1px solid var(--glass-bd); border-radius:14px;
+    box-shadow:var(--glass-sh);
+  }
+  .rctop{display:flex; justify-content:space-between; align-items:baseline; gap:14px; margin-bottom:10px;}
+  .rcrank{font-size:18px; font-weight:800; letter-spacing:1px;}
+  .rctier{font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-weight:600;}
+  .rcbar{height:8px; border-radius:999px; background:#0d0d0d; border:1px solid var(--line); overflow:hidden;}
+  .rcfill{height:100%; width:0%; background:linear-gradient(90deg,rgba(var(--accent-rgb),.55),var(--accent)); border-radius:999px; transition:width .6s ease;}
+  .rcbot{display:flex; justify-content:space-between; margin-top:8px; font-size:12px; color:var(--muted);}
+  #rankLine{font-size:14.5px; color:var(--muted); margin:10px 0 4px; line-height:1.7; text-align:center;}
+  #rankLine .rup{color:#fff; font-weight:700; letter-spacing:1px;}
+  #rankLine .rdown{color:#ff6a6a; font-weight:700; letter-spacing:1px;}
+  #whoRank{cursor:pointer; transition:border-color .15s ease, background .15s ease;}
+  #whoRank:hover{border-color:#999; background:rgba(255,255,255,.14);}
+  /* ---- live player stats: persisted per account, count up on the home view ---- */
+  .statgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px;}
+  .stat{
+    text-align:center; padding:10px 4px 8px; border-radius:11px;
+    background:var(--soft); border:1px solid var(--glass-bd);
+    transition:transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .stat:hover{
+    transform:translateY(-3px); background:var(--soft-hi);
+    border-color:var(--glass-bd-hi); box-shadow:0 8px 18px rgba(0,0,0,.4);
+  }
+  .stat b{display:block; font-size:21px; font-weight:800; line-height:1; letter-spacing:.5px;}
+  .stat span{display:block; margin-top:6px; font-size:9.5px; letter-spacing:1.2px;
+    text-transform:uppercase; color:var(--muted); font-weight:600;}
+  .stat.glow b{color:var(--accent); text-shadow:0 0 14px rgba(var(--accent-rgb),.6);}
+  .memberline{margin-top:11px; text-align:center; font-size:11px; letter-spacing:.4px;
+    color:var(--muted); min-height:14px;}
+  .memberline b{color:#cfd6e6; font-weight:700;}
+  .hierbtn{width:100%; margin-top:14px; letter-spacing:1.5px; text-transform:uppercase; font-size:11.5px;}
+  /* ---- hierarchy hall: the 17-rank ladder as an illustrated ascension path ---- */
+  #hierModal .hall{
+    width:min(780px,94vw); height:min(900px,90vh); overflow:hidden; color:var(--over-ink);
+    background:radial-gradient(120% 55% at 50% 0%, rgba(var(--accent-rgb),.20), transparent 60%),
+               var(--over);
+    -webkit-backdrop-filter:blur(22px); backdrop-filter:blur(22px);
+    border:1px solid var(--over-bd); border-radius:18px;
+    display:flex; flex-direction:column;
+    box-shadow:0 30px 90px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.07);
+  }
+  .hallhead{position:relative; text-align:center; padding:24px 58px 18px; border-bottom:1px solid var(--over-line);}
+  .hallhead .horn{font-size:13px; letter-spacing:9px; text-indent:9px; color:#777; margin-bottom:7px;}
+  .hallhead h3{font-size:20px; font-weight:800; letter-spacing:5px; text-transform:uppercase;}
+  .hallhead .hsub{margin-top:7px; font-size:12px; color:var(--over-muted); letter-spacing:.6px; line-height:1.6;}
+  .hallx{
+    position:absolute; top:14px; right:14px; width:34px; height:34px; padding:0; border-radius:50%;
+    background:transparent; border:1px solid var(--over-line); color:var(--over-muted); font-size:15px;
+    display:flex; align-items:center; justify-content:center; box-shadow:none;
+  }
+  .hallx:hover{color:#fff; border-color:#fff; background:rgba(255,255,255,.08); transform:none; box-shadow:none;}
+  .hallscroll{flex:1; overflow-y:auto; position:relative; padding:8px 28px 46px;}
+  .htier{
+    display:flex; align-items:center; gap:14px; margin:30px 4px 16px; color:#6c6c6c;
+    font-size:10.5px; font-weight:800; letter-spacing:5px; text-transform:uppercase; white-space:nowrap;
+  }
+  .htier::before{content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,#3d3d3d);}
+  .htier::after{content:''; flex:1; height:1px; background:linear-gradient(90deg,#3d3d3d,transparent);}
+  .hentry{
+    display:flex; gap:20px; align-items:center; position:relative;
+    padding:12px 16px; margin:0 0 18px; border-radius:16px; border:1px solid transparent;
+    animation:hfade .5s ease backwards;
+  }
+  @keyframes hfade{from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:none;}}
+  /* spine segment linking consecutive medallions */
+  .hentry+.hentry::before{
+    content:''; position:absolute; left:73px; top:-19px; height:19px; width:1px;
+    background:linear-gradient(180deg,transparent,#555);
+  }
+  .hcrest{flex:0 0 116px; display:flex; align-items:center; justify-content:center;}
+  .hcrest svg{width:116px; height:116px; display:block;}
+  .hcrest .rays{transform-origin:50% 50%; transform-box:fill-box; animation:hspin 70s linear infinite;}
+  @keyframes hspin{to{transform:rotate(360deg);}}
+  .hbody{flex:1; min-width:0;}
+  .hrankline{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .hname{font-size:17px; font-weight:800; letter-spacing:2px; text-transform:uppercase;}
+  .hnum{font-size:10.5px; color:#7c7c7c; letter-spacing:2px; font-weight:700; white-space:nowrap;}
+  .hyou{
+    font-size:9.5px; font-weight:800; letter-spacing:2px; text-transform:uppercase;
+    padding:3px 10px; border-radius:999px; background:#fff; color:#000;
+    box-shadow:0 0 12px rgba(255,255,255,.55);
+  }
+  .hquote{margin-top:7px; font-size:13px; line-height:1.65; color:var(--over-muted); font-style:italic;}
+  .hby{
+    display:block; margin-top:5px; font-size:10px; font-style:normal;
+    letter-spacing:2px; text-transform:uppercase; color:#666; font-weight:700;
+  }
+  .hprog{margin-top:10px; display:flex; align-items:center; gap:10px;}
+  .hprog .rcbar{flex:1;}
+  .hprog span{font-size:11px; color:var(--over-muted); white-space:nowrap;}
+  .hlocknote{margin-top:7px; font-size:10.5px; color:#6a6a6a; letter-spacing:1.5px; text-transform:uppercase; font-weight:700;}
+  .hwarn{
+    margin-top:9px; display:inline-flex; align-items:center; gap:6px;
+    font-size:10.5px; font-weight:800; letter-spacing:.6px; line-height:1.4;
+    color:#ff8a8a; padding:5px 11px; border-radius:999px;
+    background:rgba(255,70,70,.1); border:1px solid rgba(255,90,90,.32);
+  }
+  .hentry.peril .hcrest svg{filter:drop-shadow(0 0 9px rgba(255,80,80,.28));}
+  .hentry.now{
+    border-color:rgba(255,255,255,.3);
+    background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.02) 70%);
+    box-shadow:0 0 34px rgba(255,255,255,.08), inset 0 0 26px rgba(255,255,255,.04);
+  }
+  .hentry.now .hcrest svg{filter:drop-shadow(0 0 14px rgba(255,255,255,.5));}
+  .hentry.now .hcrest .rays{animation-duration:24s;}
+  .hentry.done .hname{color:#fff;}
+  .hentry.lock{opacity:.45;}
+  .hentry.lock .hcrest svg{filter:grayscale(1) brightness(.75);}
+  @media (max-width:560px){
+    .hentry{flex-direction:column; text-align:center; gap:10px;}
+    .hentry+.hentry::before{display:none;}
+    .hrankline{justify-content:center;}
+    #hierModal .hall{height:92vh;}
+  }
+  #authView{display:none; flex:1; align-items:center; justify-content:center; padding:34px 20px;}
+  body:not(.authed) #authView{display:flex;}
+  .authcard{
+    width:390px; max-width:100%;
+    background:var(--glass-strong); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+    border:1px solid var(--glass-bd); border-radius:16px; padding:28px 26px;
+    display:flex; flex-direction:column; gap:14px;
+    box-shadow:var(--glass-sh);
+  }
+  .authcard h1{text-align:center; font-size:21px;}
+  .asub{text-align:center; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:600;}
+  .authtabs{display:flex; border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .authtabs button{flex:1; border-radius:0; box-shadow:none; background:transparent; color:var(--muted); padding:9px;}
+  .authtabs button:hover{transform:none; box-shadow:none; background:rgba(255,255,255,.06); color:var(--ink);}
+  .authtabs button.on{background:#fff; color:#000;}
+  .authcard form, #contactForm{display:flex; flex-direction:column; gap:12px;}
+  .afield{display:flex; flex-direction:column; gap:5px;}
+  .afield label{font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  input, textarea{
+    background:#0d0d0d; border:1px solid var(--line); border-radius:9px;
+    color:var(--ink); padding:10px 12px; font:inherit; font-size:14px;
+  }
+  input:focus, textarea:focus{outline:none; border-color:#888; box-shadow:0 0 0 3px rgba(255,255,255,.08);}
+  /* iOS auto-zooms when a focused field's text is under 16px; that zoom persists after the
+     keyboard closes (and across reloads), leaving fields shifted so later taps miss them and
+     the keyboard won't reopen. Forcing 16px on touch devices stops the zoom entirely. */
+  @media (pointer:coarse){ input, textarea, select{font-size:16px;} }
+  .aerr{color:#ff4d4d; font-size:12.5px; font-weight:600; min-height:16px;}
+  .anote{font-size:11px; color:#666; line-height:1.5; text-align:center;}
+  .pagebox{
+    max-width:780px; margin:24px auto 0;
+    background:var(--glass); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
+    border:1px solid var(--glass-bd); border-radius:16px; padding:30px 36px;
+    box-shadow:var(--glass-sh);
+  }
+  .pagebox h2{font-size:20px; letter-spacing:2px; text-transform:uppercase; font-weight:800;
+    border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:16px;}
+  .pagebox h3{font-size:13px; letter-spacing:2px; text-transform:uppercase; font-weight:800; margin:20px 0 8px;}
+  .pagebox p, .pagebox li{font-size:14px; line-height:1.75; color:var(--muted);}
+  .pagebox ul{padding-left:20px; display:flex; flex-direction:column; gap:6px;}
+  .pagebox b{color:var(--ink);}
+  .pagebox a{color:var(--ink); text-decoration:underline; text-underline-offset:3px;}
+  .pagebox .pi{font-size:30px; float:right; margin-left:14px; opacity:.9;}
