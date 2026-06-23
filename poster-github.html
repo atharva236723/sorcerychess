@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sorcery Chess — GitHub Social Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:1280px;height:640px;overflow:hidden;background:#000;}
+  .canvas{
+    position:relative;width:1280px;height:640px;overflow:hidden;
+    background:
+      radial-gradient(900px 400px at 50% 30%,rgba(36,110,180,.32),transparent 65%),
+      radial-gradient(1400px 500px at 50% 115%,rgba(61,169,255,.18),transparent 60%),
+      linear-gradient(180deg,#05070a 0%,#0a0d12 45%,#030406 100%);
+    font-family:'Inter',Arial,sans-serif;color:#f2f2f2;
+  }
+
+  /* board */
+  .stage{position:absolute;inset:0;perspective:900px;perspective-origin:50% 30%;}
+  .board{
+    position:absolute;left:55%;top:340px;width:1600px;height:1600px;
+    transform:translateX(-50%) rotateX(62deg);
+    transform-origin:50% 0;
+    background:repeating-conic-gradient(#e8e6e0 0% 25%,#14161a 0% 50%) 0 0/200px 200px;
+  }
+  .board::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(120,180,255,.22),rgba(0,0,0,.05) 45%,rgba(0,0,0,.65));
+  }
+  .horizon{
+    position:absolute;left:0;right:0;top:260px;height:220px;
+    background:linear-gradient(180deg,rgba(3,4,6,1) 0%,rgba(3,4,6,.8) 40%,transparent 100%);
+  }
+  .poolglow{
+    position:absolute;left:55%;top:420px;width:700px;height:220px;transform:translateX(-50%);
+    background:radial-gradient(50% 50% at 50% 50%,rgba(61,169,255,.30),transparent 70%);
+    filter:blur(6px);
+  }
+
+  /* pieces */
+  .piece{position:absolute;text-align:center;line-height:1;}
+  .piece .glyph{
+    display:block;
+    background:linear-gradient(180deg,#ffffff 8%,#cfd6de 38%,#6d7686 78%,#2c313a 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 14px 18px rgba(0,0,0,.85));
+  }
+  .piece.magic .glyph{
+    background:linear-gradient(180deg,#d9efff 0%,#6cc0ff 45%,#1769b3 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 22px rgba(61,169,255,.95)) drop-shadow(0 12px 16px rgba(0,0,0,.85));
+  }
+  .piece .refl{
+    display:block;transform:scaleY(-1);margin-top:-6px;
+    background:linear-gradient(0deg,#ffffff,#aab4c0 60%,transparent);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    opacity:.14;filter:blur(2px);
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 62%);
+    mask-image:linear-gradient(180deg,#000 0%,transparent 62%);
+  }
+  .piece.magic .refl{
+    background:linear-gradient(0deg,#8fd0ff,#3da9ff 55%,transparent);
+    -webkit-background-clip:text;background-clip:text;color:transparent;opacity:.28;
+  }
+
+  /* mist */
+  .mist{position:absolute;border-radius:50%;filter:blur(36px);}
+  .m1{left:400px;top:380px;width:400px;height:100px;background:rgba(61,169,255,.12);}
+  .m2{left:700px;top:420px;width:380px;height:90px;background:rgba(120,180,255,.09);}
+
+  /* LEFT: text */
+  .left{position:absolute;left:64px;top:0;bottom:0;width:540px;display:flex;flex-direction:column;justify-content:center;z-index:5;}
+  .kicker{
+    font-size:14px;font-weight:700;letter-spacing:8px;text-transform:uppercase;
+    color:#8fcaff;text-shadow:0 0 14px rgba(61,169,255,.8);margin-bottom:14px;
+  }
+  h1{
+    font-family:'Cinzel',serif;font-weight:900;font-size:72px;line-height:.95;
+    letter-spacing:3px;color:#f4f6f8;
+    text-shadow:0 0 14px rgba(150,205,255,.45),0 0 50px rgba(61,169,255,.5),0 4px 12px rgba(0,0,0,.9);
+    margin-bottom:18px;
+  }
+  .tagline{font-size:19px;font-weight:600;color:#c8d2dc;line-height:1.4;margin-bottom:28px;}
+  .tagline b{color:#fff;}
+  .pills{display:flex;gap:10px;flex-wrap:wrap;}
+  .pill{
+    padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    border:1px solid rgba(143,202,255,.35);
+    background:linear-gradient(180deg,rgba(20,28,40,.9),rgba(8,11,16,.9));
+    color:#8fcaff;
+  }
+
+  /* RIGHT: pieces area — no extra div needed, pieces are absolute */
+  .vignette{
+    position:absolute;inset:0;z-index:8;pointer-events:none;
+    background:radial-gradient(75% 75% at 65% 55%,transparent 45%,rgba(0,0,0,.60) 100%);
+  }
+  /* fade left edge so board doesn't clash with text */
+  .leftfade{
+    position:absolute;left:0;top:0;bottom:0;width:620px;z-index:4;pointer-events:none;
+    background:linear-gradient(90deg,rgba(3,4,6,.96) 0%,rgba(3,4,6,.85) 60%,transparent 100%);
+  }
+  .grain{
+    position:absolute;inset:0;z-index:9;pointer-events:none;opacity:.11;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="stage"><div class="board"></div></div>
+  <div class="horizon"></div>
+  <div class="poolglow"></div>
+  <div class="mist m1"></div>
+  <div class="mist m2"></div>
+
+  <!-- pieces: right side of poster -->
+  <div class="piece magic" style="left:640px;top:268px;font-size:100px;">
+    <span class="glyph">❅</span><span class="refl">❅</span></div>
+  <div class="piece magic" style="left:750px;top:240px;font-size:118px;">
+    <span class="glyph">☿</span><span class="refl">☿</span></div>
+  <div class="piece" style="left:870px;top:190px;font-size:170px;">
+    <span class="glyph">♔</span><span class="refl">♔</span></div>
+  <div class="piece magic" style="left:1020px;top:255px;font-size:110px;">
+    <span class="glyph">✶</span><span class="refl">✶</span></div>
+  <div class="piece magic" style="left:1130px;top:278px;font-size:88px;">
+    <span class="glyph">⚚</span><span class="refl">⚚</span></div>
+
+  <div class="leftfade"></div>
+
+  <div class="left">
+    <div class="kicker">Chess was only the beginning</div>
+    <h1>SORCERY<br>CHESS</h1>
+    <div class="tagline">The royal game —<br><b>with magic in the ranks</b></div>
+    <div class="pills">
+      <div class="pill">12 × 12 board</div>
+      <div class="pill">4 spellcasters</div>
+      <div class="pill">AI opponent</div>
+      <div class="pill">Online play</div>
+    </div>
+  </div>
+
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+</div>
+</body>
+</html>
