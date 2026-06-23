@@ -2,6 +2,8 @@
 
 A two-player chess variant played on a **12 × 12 board** with four unique **spellcaster pieces** — each with a special ability that changes the game entirely. Built as a pure static web app: zero dependencies, no build step, opens straight from `file://`.
 
+![Sorcery Chess Gameplay](screenshot.png.png)
+
 ---
 
 ## ✨ Features
