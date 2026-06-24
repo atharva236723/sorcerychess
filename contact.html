@@ -144,17 +144,10 @@ document.addEventListener('DOMContentLoaded',function(){document.body.classList.
 </footer>
 
 <script>
-/* Send the message through Web3Forms (https://web3forms.com). It relays the submission to
-   our inbox server-side, so our destination address never appears in this page. The only
-   token here is a public "access key" — it is safe to expose; it just routes to our inbox. */
 (function(){
-  // Web3Forms access key — get a free one at https://web3forms.com (just enter your email).
-  var ACCESS_KEY='2d5a367f-3165-406e-9f06-2d602cda5b29';
-
   var form=document.getElementById('contactForm');
   var status=document.getElementById('cfStatus');
   var btn=document.getElementById('cfSend');
-  // grab fields by id — NOT form.name (that's the form's own name property, not the input)
   var fName=document.getElementById('cfName'), fEmail=document.getElementById('cfEmail'),
       fSubject=document.getElementById('cfSubject'), fMsg=document.getElementById('cfMsg'),
       fCompany=document.getElementById('cfCompany');
@@ -169,23 +162,19 @@ document.addEventListener('DOMContentLoaded',function(){document.body.classList.
     if(fCompany.value.trim()){ set('Message sent — thank you! We read every one.','ok'); form.reset(); return; }
     btn.disabled=true; set('Sending…','');
     var payload={
-      access_key:ACCESS_KEY,
-      from_name:'Sorcery Chess contact form',
-      subject:'[Sorcery Chess] '+subject,
       name:name,
-      message:message,
-      botcheck:false
+      subject:'[Sorcery Chess] '+subject,
+      message:message
     };
-    // only attach email when given — Web3Forms uses it as the reply-to address
-    if(email){ payload.email=email; payload.replyto=email; }
-    fetch('https://api.web3forms.com/submit',{
+    if(email){ payload.email=email; payload._replyto=email; }
+    fetch('https://formspree.io/f/mojojqlz',{
       method:'POST',
       headers:{'content-type':'application/json',accept:'application/json'},
       body:JSON.stringify(payload)
-    }).then(function(r){ return r.json().catch(function(){ return {success:r.ok}; }); })
+    }).then(function(r){ return r.json().catch(function(){ return {ok:r.ok}; }); })
       .then(function(d){
-        if(d&&d.success){ set('Message sent — thank you! We read every one.','ok'); form.reset(); }
-        else { set((d&&d.message)||'Something went wrong. Please try again later.','err'); }
+        if(d&&d.ok!==false){ set('Message sent — thank you! We read every one.','ok'); form.reset(); }
+        else { set((d&&d.error)||'Something went wrong. Please try again later.','err'); }
       })
       .catch(function(){ set('Could not reach the server. Please check your connection and try again.','err'); })
       .finally(function(){ btn.disabled=false; });
