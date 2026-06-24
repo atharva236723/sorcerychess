@@ -2,11 +2,15 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "sorcery-chess",
   "compatibility_date": "2026-06-01",
-  // 100% static site. The contact form posts directly to Web3Forms (see contact.html),
+  // 100% static site. The contact form posts directly to Formspree (see contact.html),
   // so there is no Worker script and no secrets — Cloudflare just serves these files.
   "assets": {
     "directory": ".",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
-  }
+  },
+  "routes": [
+    { "pattern": "sorcerychess.com/*", "zone_name": "sorcerychess.com" },
+    { "pattern": "www.sorcerychess.com/*", "zone_name": "sorcerychess.com" }
+  ]
 }
