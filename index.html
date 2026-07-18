@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3084454492205827" crossorigin="anonymous"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYW0RG12M0"></script>
 <script>
@@ -177,7 +179,7 @@
      build step the browser will otherwise serve a stale mix (e.g. an old state.js without
      the newer VARIANTS table), which crashes the scripts that depend on it. Keep css + js
      on the same version token so they always load as a matched set. -->
-<link rel="stylesheet" href="css/base.css?v=8">
+<link rel="stylesheet" href="css/base.css?v=9">
 <link rel="stylesheet" href="css/home.css?v=5">
 <link rel="stylesheet" href="css/faq.css?v=1">
 <link rel="stylesheet" href="css/board.css?v=6">
@@ -192,7 +194,11 @@
      page so cross-document navigations between them animate too -->
 <link rel="stylesheet" href="css/transitions.css?v=1">
 </head>
-<body>
+<!-- Start in "guest" mode: the site is fully browsable and playable WITHOUT an account,
+     so visitors (and crawlers/reviewers) land straight on real content instead of a login
+     wall. boot.js swaps to a real session if one is saved. `authed` reveals the shell;
+     `guest` swaps the navbar account controls for a "Sign in" button. -->
+<body class="authed guest">
 <div id="bgfx" aria-hidden="true">
   <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
   <div class="ring r1"></div><div class="ring r2"></div>
@@ -201,6 +207,7 @@
 <nav id="topnav">
   <a class="brand" id="brandHome" href="#" title="Back to home">♚ Sorcery Chess</a>
   <a class="nl" data-page="home" href="#">Home</a>
+  <a class="nl" href="how-to-play.html">How to play</a>
   <a class="nl" href="codex.html">Spellcasters</a>
   <a class="nl" href="leaderboard.html">Leaderboard</a>
   <a class="nl" href="points.html">Scoring</a>
@@ -217,13 +224,15 @@
     <button class="ghost mini" id="themeBtn" aria-haspopup="true" aria-expanded="false">🎨 Theme</button>
     <div class="thmenu" id="themeMenu" role="menu"></div>
   </div>
+  <button class="ghost mini" id="signinBtn">⚔ Sign in</button>
   <button class="ghost mini" id="logoutBtn">⎋ Log out</button>
 </nav>
 
 <div id="authView">
   <div class="authcard">
+    <button type="button" class="authx" id="authClose" title="Close" aria-label="Close">✕</button>
     <h1>Sorcery Chess</h1>
-    <p class="asub">Sign in to enter the arena</p>
+    <p class="asub">Sign in to save your rank</p>
     <div class="authtabs">
       <button type="button" id="tabLogin" class="on">Log in</button>
       <button type="button" id="tabSignup">Sign up</button>
@@ -246,7 +255,9 @@
       <div class="aerr" id="suErr"></div>
       <button type="submit">✶ Create account &amp; play</button>
     </form>
-    <p class="anote">Accounts live only in this browser's local storage — nothing is ever sent to a server.</p>
+    <p class="anote">You can play as a guest without an account — signing in just saves your rank
+      and stats on this device. Accounts live only in this browser's local storage; nothing is ever
+      sent to a server.</p>
   </div>
 </div>
 
@@ -512,9 +523,19 @@
   <!-- Explore band: real, crawlable pages surfaced on the home view (true MPA links) -->
   <section class="explore" aria-label="Explore Sorcery Chess">
     <h2>Explore Sorcery Chess</h2>
-    <p class="exsub">Learn the story behind the game, reach out, or read the fine print — each opens its
-      own page.</p>
+    <p class="exsub">Learn the rules, sharpen your tactics, read the story behind the game, or check the
+      fine print — each opens its own page.</p>
     <div class="exgrid">
+      <a class="excard" href="how-to-play.html">
+        <span class="exi">♟</span><b>How to play</b>
+        <span>The complete rules — the board, how every piece moves, the four spellcasters, check,
+          the clock, and how to win.</span>
+      </a>
+      <a class="excard" href="strategy.html">
+        <span class="exi">♛</span><b>Strategy guide</b>
+        <span>Opening principles, spellcaster tactics, clock management and endgame tips to help you
+          win more games and climb the ranks.</span>
+      </a>
       <a class="excard" href="about.html">
         <span class="exi">♚</span><b>About us</b>
         <span>The story behind the 12×12 board and its four spellcasters, and how the game is built.</span>
@@ -645,6 +666,11 @@
       <a class="fl" href="leaderboard.html">Leaderboard</a>
       <a class="fl" href="points.html">Points &amp; Ranks</a>
       <a class="fl" href="profile.html">Profile</a>
+    </div>
+    <div class="fcol">
+      <h4>Learn</h4>
+      <a class="fl" href="how-to-play.html">How to play</a>
+      <a class="fl" href="strategy.html">Strategy guide</a>
     </div>
     <div class="fcol">
       <h4>Company</h4>
@@ -873,6 +899,6 @@
 <script src="js/variant.js?v=4"></script>
 <script src="js/online.js?v=3"></script>
 <script src="js/fx.js?v=3"></script>
-<script src="js/boot.js?v=10"></script>
+<script src="js/boot.js?v=11"></script>
 </body>
 </html>

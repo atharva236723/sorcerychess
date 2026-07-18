@@ -109,6 +109,14 @@
   #topnav .who{font-size:12.5px; color:var(--muted); margin-right:8px;}
   #topnav .who b{color:var(--ink);}
   @media (max-width:920px){ #topnav .who{display:none;} }
+  /* ---- guest vs signed-in navbar ----
+     A guest (browsing/playing without an account) sees a "Sign in" button; the profile
+     avatar, rank chip and "Log out" are hidden until they actually have an account. */
+  #signinBtn{display:none;}
+  body.guest #signinBtn{display:inline-flex; align-items:center;}
+  body.guest #navProfile,
+  body.guest #topnav .who,
+  body.guest #logoutBtn{display:none;}
   /* ---- site footer: only shown once authed (mirrors #topnav) ---- */
   #footer{display:none;}
   body.authed #footer{
@@ -260,15 +268,33 @@
     .hrankline{justify-content:center;}
     #hierModal .hall{height:92vh;}
   }
-  #authView{display:none; flex:1; align-items:center; justify-content:center; padding:34px 20px;}
-  body:not(.authed) #authView{display:flex;}
+  /* The auth card is no longer a full-screen wall. It shows in two cases:
+       1. body:not(.authed)  — the pre-JS / signed-out fallback (kept for safety), and
+       2. body.show-auth     — a guest clicked "Sign in", so it floats as a modal overlay. */
+  #authView{display:none; align-items:center; justify-content:center; padding:34px 20px;}
+  body:not(.authed) #authView{display:flex; flex:1;}
+  body.show-auth #authView{
+    display:flex; position:fixed; inset:0; z-index:120;
+    background:rgba(0,0,0,.62); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+    animation:pageIn .28s ease-out;
+  }
   .authcard{
+    position:relative;
     width:390px; max-width:100%;
     background:var(--glass-strong); -webkit-backdrop-filter:blur(var(--blur)); backdrop-filter:blur(var(--blur));
     border:1px solid var(--glass-bd); border-radius:16px; padding:28px 26px;
     display:flex; flex-direction:column; gap:14px;
     box-shadow:var(--glass-sh);
   }
+  /* close ✕ — only meaningful when the card is a dismissable overlay */
+  .authx{
+    position:absolute; top:12px; right:12px; width:30px; height:30px; padding:0;
+    display:none; align-items:center; justify-content:center;
+    border:1px solid var(--line); border-radius:8px; background:transparent;
+    color:var(--muted); font-size:14px; line-height:1; box-shadow:none;
+  }
+  .authx:hover{background:rgba(255,255,255,.08); color:var(--ink); transform:none; box-shadow:none;}
+  body.show-auth .authx{display:inline-flex;}
   .authcard h1{text-align:center; font-size:21px;}
   .asub{text-align:center; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:600;}
   .authtabs{display:flex; border:1px solid var(--line); border-radius:10px; overflow:hidden;}

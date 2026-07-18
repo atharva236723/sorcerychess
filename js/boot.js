@@ -12,7 +12,9 @@ function enterSite(user){
   try{ liErr.textContent=''; suErr.textContent=''; }catch(e){}
   const liP=document.getElementById('liPass'), suP=document.getElementById('suPass');
   if(liP) liP.value=''; if(suP) suP.value='';
+  // a real account: leave guest mode and close the sign-in overlay if it was open
   document.body.classList.add('authed');
+  document.body.classList.remove('guest','show-auth');
   // Land on the home view FIRST, before anything else can fail. A cosmetic painter that
   // throws (e.g. a browser holding a stale cached index.html that is missing an element a
   // newer painter expects) must NEVER strand a signed-in player on a blank page with no
@@ -37,6 +39,31 @@ function enterSite(user){
     else if(gameBooted) render(); // logging back in mid-session: just refresh the board
   }catch(e){ console.error('enterSite: game restore failed', e); }
 }
+
+/* Guest mode: the site with no account. Identical shell to a signed-in session (content
+   visible, game playable, clock runs), but no rank/stats/points are saved — the account
+   painters all no-op gracefully when there is no session. This is what a first-time
+   visitor (and the crawler / AdSense reviewer) gets, so they land on real content instead
+   of a login wall. Signing in via the navbar swaps this for a real session (enterSite). */
+function enterGuest(){
+  document.body.classList.add('authed','guest');
+  document.body.classList.remove('show-auth');
+  try{ showPage('home'); }catch(e){ console.error('enterGuest: showPage failed', e); }
+  // painters below no-op without an account, but keep the champion (decorative) painted
+  [updateRankUI, ()=>updateStatsUI(false), updateModeLocks, updateAvatarUI, updateChampion]
+    .forEach(fn=>{ try{ fn(); }catch(e){ console.error('enterGuest: paint step failed', e); } });
+  try{ scrollTop(); }catch(e){}
+  requestAnimationFrame(()=>{ try{ if(lenis) lenis.resize(); scrollTop(); }catch(e){} });
+  // a guest can still have an in-progress match saved locally — resume it quietly
+  try{
+    if(!gameBooted && loadGame()){ gameBooted=true; render(); scheduleAI(); }
+    else if(gameBooted) render();
+  }catch(e){ console.error('enterGuest: game restore failed', e); }
+}
+
+/* open / close the sign-in overlay (guests only — a real account never shows it) */
+function openAuth(){ authTab(true); document.body.classList.add('show-auth'); }
+function closeAuth(){ document.body.classList.remove('show-auth'); }
 
 /* auth card: tab switching + submit handlers */
 const liErr=document.getElementById('liErr'), suErr=document.getElementById('suErr');
@@ -83,9 +110,10 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
 // sign-out only runs once they confirm; "Stay a while" or a click-outside just closes it.
 function performLogout(){
   try{ localStorage.removeItem(SESSION_KEY); }catch(e){}
-  document.body.classList.remove('authed');
   clockPaused=true; // the saved game stays — it resumes on the next sign-in
   authTab(true);
+  // don't drop to a login wall — signing out just returns to guest mode (site stays usable)
+  enterGuest();
 }
 document.getElementById('logoutBtn').addEventListener('click',()=>{
   document.getElementById('logoutModal').style.display='flex';
@@ -96,6 +124,14 @@ document.getElementById('logoutYes').addEventListener('click',()=>{
 });
 document.getElementById('logoutNo').addEventListener('click',()=>{
   document.getElementById('logoutModal').style.display='none';
+});
+
+/* guest "Sign in" button opens the auth overlay; the ✕ (or a click on the dark backdrop)
+   closes it so a guest is never trapped on the login card. */
+document.getElementById('signinBtn').addEventListener('click',openAuth);
+document.getElementById('authClose').addEventListener('click',closeAuth);
+document.getElementById('authView').addEventListener('click',e=>{
+  if(e.target.id==='authView' && document.body.classList.contains('show-auth')) closeAuth();
 });
 
 /* The privacy "wipe account" button and the contact form now live on the standalone
@@ -220,9 +256,11 @@ function updateTimeline(){ if(window.__updateTimeline) window.__updateTimeline()
   },{passive:true});
 })();
 
-/* boot: restore the signed-in session, or ask the player to sign in */
+/* boot: restore the signed-in session, else fall back to guest mode (the site is fully
+   usable without an account — no login wall). */
 (function(){
   let sess=null; try{ sess=localStorage.getItem(SESSION_KEY); }catch(e){}
   const user=sess?getUsers()[sess]:null;
   if(user) enterSite(user);
+  else enterGuest();
 })();
